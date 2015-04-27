@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>問題画面 - Quiz</title>
+</head>
+<body>
+
+<header>
+    <h1>Quiz</h1>
+</header>
+
+<main>
+    <section>
+        <h2>第1問</h2>
+        <p>1</p>
+        <p>2</p>
+        <p>3</p>
+        <p>4</p>
+    </section>
+    <time>あと8秒</time>
+    <button id="btn_next">次へ</button>
+</main>
+
+<footer>©MeHerBu</footer>
+
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="http://cdn.mlkcca.com/v0.2.8/milkcocoa.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
+<script>
+var milkcocoa = new MilkCocoa('https://io-zi5c0nhz1.mlkcca.com');
+var ds = milkcocoa.dataStore('test');
+var $btn_next = $('#btn_next');
+
+// --------------------------------------------------------
+// 関数
+// --------------------------------------------------------
+
+
+
+// --------------------------------------------------------
+// ユーザーアクション
+// --------------------------------------------------------
+$btn_next.on('click', function(){
+    ds.send({
+        content : 'Hello!'
+    });
+});
+
+
+
+// --------------------------------------------------------
+// イベント通知
+// --------------------------------------------------------
+
+
+
+// --------------------------------------------------------
+// View
+// --------------------------------------------------------
+
+</script>
+
+</body>
+</html>

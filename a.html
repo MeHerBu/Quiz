@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>解答画面 - Quiz</title>
+</head>
+<body>
+
+<header>
+    <h1>Quiz</h1>
+</header>
+
+<main>
+    <section>
+        <h2>Q.{{num}}</h2>
+        <p>{{quiz}}</p>
+    </section>
+
+    <section>
+        <h2>答え</h2>
+        <ol>
+           <li v-repeat="q">
+                <label><input type="radio" name="ex" value="{{$value}}" v-on="click: onFunc($event)">{{$value}}</label>
+            </li>
+        </ol>
+    </section>
+</main>
+
+<footer>©MeHerBu</footer>
+
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="http://cdn.mlkcca.com/v0.2.8/milkcocoa.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
+<script>
+var milkcocoa = new MilkCocoa('https://io-zi5c0nhz1.mlkcca.com');
+var ds = milkcocoa.dataStore('test');
+
+// --------------------------------------------------------
+// 関数
+// --------------------------------------------------------
+
+
+
+// --------------------------------------------------------
+// ユーザーアクション
+// --------------------------------------------------------
+
+
+
+
+// --------------------------------------------------------
+// イベント通知
+// --------------------------------------------------------
+ds.on('send', function(data){
+    alert('クリックされました');
+    // console.log(data.value.content);
+});
+
+
+
+// --------------------------------------------------------
+// View
+// --------------------------------------------------------
+var vue = new Vue({
+	el: 'main',
+	data: {
+		num: 1,
+        quiz: 'HTMLの最新バージョンは？',
+        q: ['HTML2', 'HTML4', 'HTML5', 'HTML8']
+	},
+	methods: {
+		onFunc: function(e) {
+			console.log(e);
+		}
+	}
+});
+</script>
+
+</body>
+</html>
