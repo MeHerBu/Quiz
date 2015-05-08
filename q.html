@@ -25,11 +25,11 @@
 <footer>©MeHerBu</footer>
 
 <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
-<script src="http://cdn.mlkcca.com/v0.2.8/milkcocoa.js"></script>
+<script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
 <script>
-var milkcocoa = new MilkCocoa('https://io-zi5c0nhz1.mlkcca.com');
-var ds = milkcocoa.dataStore('test');
+var milkcocoa = new MilkCocoa("maxi9ffclh3.mlkcca.com");
+var ds = milkcocoa.dataStore('quiz');
 var $btn_next = $('#btn_next');
 
 // --------------------------------------------------------
@@ -58,6 +58,45 @@ $btn_next.on('click', function(){
 // --------------------------------------------------------
 // View
 // --------------------------------------------------------
+
+// --------------------------------------------------------
+// QA JSON
+// --------------------------------------------------------
+var qaJson =
+{
+    "q1": {
+        "question" : "HTMLの最新バージョンは？",
+        "answer" : {
+            "a1" : "HTML2",
+            "a2" : "HTML4",
+            "a3" : "HTML5",
+            "a4" : "HTML7",
+            "correct" : "a3"
+        }
+    },
+    "q2": {
+        "question" : "CSSの最新バージョンは？",
+        "answer" : {
+            "a1" : "CSS2",
+            "a2" : "CSS3",
+            "a3" : "CSS5",
+            "a4" : "CSS10",
+            "correct" : "a5"
+        }
+    },
+    "q3": {
+        "question" : "ECMAScriptの最新バージョンは？",
+        "answer" : {
+            "a1" : "ECMAScript 3",
+            "a2" : "ECMAScript 4",
+            "a3" : "ECMAScript 5",
+            "a4" : "ECMAScript 6",
+            "correct" : "a3"
+        }
+    }
+}
+
+console.log(qaJson.q2.answer.a1);
 
 </script>
 
