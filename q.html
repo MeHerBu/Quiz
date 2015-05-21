@@ -12,10 +12,11 @@
 
 <main>
     <section>
+        <input type="number" v-model="keyword" v-on="change: getQ()" value="1">
         <h2>第{{num}}問</h2>
         <p>{{quiz}}</p>
         <ol>
-           <li v-repeat="q">{{$value}}</li>
+           <li v-repeat="ex">{{$value}}</li>
         </ol>
     </section>
     <!-- <time>あと8秒</time> -->
@@ -35,7 +36,6 @@ var milkcocoa = new MilkCocoa('maxi9ffclh3.mlkcca.com');
 var ds = milkcocoa.dataStore('quiz');
 var $btn_next = $('#btn_next');
 var $btn_prev = $('#btn_prev');
-var n = 3;
 
 
 // --------------------------------------------------------
@@ -85,9 +85,19 @@ var qaJson =
 var vue = new Vue({
     el: 'main',
     data: {
-        num: n,
-        quiz: qaJson['q' + n].question,
-        q: _.values(qaJson['q' + n].answer)
+        keyword: '',
+        num: '',
+        quiz: '',
+        ex: ''
+    },
+    methods:{
+        getQ: function(){
+            var that = this;
+
+            that.num = that.keyword;
+            that.quiz = qaJson['q' + that.num].question;
+            that.ex = _.values(qaJson['q' + that.num].answer);
+        }
     }
 });
 
@@ -99,14 +109,11 @@ $btn_next.on('click', function(){
 
 });
 
-$btn_clear.on('click', function(){
-
-});
-
 
 // --------------------------------------------------------
 // Ready
 // --------------------------------------------------------
+console.log(vue.num);
 
 </script>
 
