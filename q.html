@@ -12,16 +12,14 @@
 
 <main>
     <section>
-        <input type="number" v-model="keyword" v-on="change: getQ()" value="1">
-        <h2>第{{num}}問</h2>
+        <h2 v-show="num">第{{num}}問</h2>
         <p>{{quiz}}</p>
         <ol>
            <li v-repeat="ex">{{$value}}</li>
         </ol>
     </section>
     <!-- <time>あと8秒</time> -->
-    <button id="btn_prev">Prev</button>
-    <button id="btn_next">Next</button>
+    <button id="btn_next" v-on="click: changeQ()">Next</button>
 </main>
 
 <footer>©MeHerBu</footer>
@@ -35,7 +33,7 @@
 var milkcocoa = new MilkCocoa('maxi9ffclh3.mlkcca.com');
 var ds = milkcocoa.dataStore('quiz');
 var $btn_next = $('#btn_next');
-var $btn_prev = $('#btn_prev');
+var n = 0;
 
 
 // --------------------------------------------------------
@@ -78,6 +76,10 @@ var qaJson =
     }
 }
 
+// 問題数を取得
+var qNum = 0;
+for(var i in qaJson){ qNum++; }
+
 
 // --------------------------------------------------------
 // View
@@ -91,29 +93,30 @@ var vue = new Vue({
         ex: ''
     },
     methods:{
-        getQ: function(){
+        // 問題を切り替える処理
+        changeQ: function(){
             var that = this;
 
-            that.num = that.keyword;
-            that.quiz = qaJson['q' + that.num].question;
-            that.ex = _.values(qaJson['q' + that.num].answer);
+            // 次の問題をデータバインド
+            if(n < qNum) {
+                that.num = ++n;
+                that.quiz = qaJson['q' + that.num].question;
+                that.ex = _.values(qaJson['q' + that.num].answer);
+            } else if(n == qNum) {
+                // 最後の問題になったら、NextボタンをOFFにする
+                $btn_next.attr('disabled', 'disabled');
+            }
         }
     }
 });
 
 
 // --------------------------------------------------------
-// ユーザーアクション
-// --------------------------------------------------------
-$btn_next.on('click', function(){
-
-});
-
-
-// --------------------------------------------------------
 // Ready
 // --------------------------------------------------------
-console.log(vue.num);
+// 初回データ取得・セット
+vue.changeQ();
+
 
 </script>
 
