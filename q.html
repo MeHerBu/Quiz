@@ -30,6 +30,67 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
 <script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'></script>
 <script src="src/js/app.js"></script>
+<script>
+// --------------------------------------------------------
+// Setting
+// --------------------------------------------------------
+var $btn_next = $('#btn_next');
+
+
+// --------------------------------------------------------
+// View
+// --------------------------------------------------------
+var vue = new Vue({
+    el: 'main',
+    data: {
+        num: '',
+        quiz: '',
+        ex: ''
+    },
+
+    methods:{
+        // JSONを取得
+        getJson: function(){
+            $.getJSON(jsonPath).done(function(data){
+                qaJson = data;
+                getObjLength(qaJson);
+                vue.changeQ(qaJson);
+            });
+        },
+
+        // 問題を切り替える処理
+        changeQ: function(){
+            var that = this;
+            ++actNum;
+
+            // 次の問題をデータバインド
+            if(actNum <= maxNum) {
+                that.$set('num', actNum);
+                that.$set('quiz', qaJson['q' + actNum].question);
+                that.$set('ex', _.values(qaJson['q' + actNum].answer));
+            }
+            if(actNum == maxNum) {
+                // 最後の問題になったら、NextボタンをOFFにする
+                $btn_next.attr('disabled', 'disabled');
+            }
+
+            // データストアに送信
+            DS.send({
+                DSactNum : actNum, // 問題数
+                DSmaxNum : _.values(that.ex).length // 回答数
+            });
+        }
+    }
+});
+
+
+// --------------------------------------------------------
+// Load
+// --------------------------------------------------------
+// 初回描画
+vue.getJson();
+
+</script>
 
 </body>
 </html>
