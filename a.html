@@ -11,7 +11,7 @@
     <h1>Quiz</h1>
 </header>
 
-<main>
+<main v-cloak>
     <section>
         <h2>Q.{{num}}</h2>
     </section>
@@ -48,8 +48,9 @@ var vue = new Vue({
         // 問題を切り替える処理
         changeQ: function(n, max){
             var that = this;
-            that.num = n;
-            that.exA = _.range(max);
+
+            that.$set('num', n);
+            that.$set('exA', _.range(max));
         }
     }
 });

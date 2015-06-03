@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
 <title>問題画面 - Quiz</title>
+<style>[v-cloak] { display:none }</style>
 </head>
 <body>
 
@@ -11,7 +12,7 @@
     <h1>Quiz</h1>
 </header>
 
-<main>
+<main v-cloak>
     <section>
         <h2 v-show="num">Q.{{num}}</h2>
         <p>{{quiz}}</p>
@@ -74,10 +75,15 @@ var vue = new Vue({
                 $btn_next.attr('disabled', 'disabled');
             }
 
-            // データストアに送信
+            //
+            vue.sendDS(actNum, that.$get('ex'));
+        },
+
+        // データストア
+        sendDS: function(actNum, ex){
             DS.send({
                 DSactNum : actNum, // 問題数
-                DSmaxNum : _.values(that.ex).length // 回答数
+                DSmaxNum : _.values(ex).length // 回答数
             });
         }
     }
