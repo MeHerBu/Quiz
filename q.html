@@ -4,7 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
 <title>問題画面 - Quiz</title>
-<style>[v-cloak] { display:none }</style>
+<style>
+[v-cloak] { display:none }
+.ranking img { width: 20px; height: 20px; }
+</style>
 </head>
 <body>
 
@@ -20,8 +23,19 @@
            <li v-repeat="ex">{{$value}}</li>
         </ol>
     </section>
-    <!-- <time>あと8秒</time> -->
+    <time>あと{{time}}秒</time>
     <button id="btn_next" v-on="click: changeQ()">Next</button>
+</main>
+
+<hr>
+<main class="ranking">
+    <h2>ランキング</h2>
+    <ol>
+        <li><img src="https://avatars2.githubusercontent.com/u/8349175?v=3&s=460">moritakenji</li>
+        <li><img src="https://avatars2.githubusercontent.com/u/6580754?v=3&s=460">sao-murakami</li>
+        <li><img src="https://avatars2.githubusercontent.com/u/7579236?v=3&s=460">y-nishino</li>
+        <li><img src="https://avatars0.githubusercontent.com/u/6120877?v=3&s=460">mdb-konno</li>
+    </ol>
 </main>
 
 <footer>©MeHerBu</footer>
@@ -36,6 +50,9 @@
 // Setting
 // --------------------------------------------------------
 var $btn_next = $('#btn_next');
+var intervalTime = 1000; // 1秒
+var countTime = 5;
+var sec = countTime;
 
 
 // --------------------------------------------------------
@@ -46,7 +63,8 @@ var vue = new Vue({
     data: {
         num: '',
         quiz: '',
-        ex: ''
+        ex: '',
+        time: sec
     },
 
     methods:{
@@ -75,7 +93,7 @@ var vue = new Vue({
                 $btn_next.attr('disabled', 'disabled');
             }
 
-            //
+            // 回答画面にデータを送信
             vue.sendDS(actNum, that.$get('ex'));
         },
 
@@ -85,6 +103,18 @@ var vue = new Vue({
                 DSactNum : actNum, // 問題数
                 DSmaxNum : _.values(ex).length // 回答数
             });
+        },
+
+        countDowon: function(){
+            sec--;
+            vue.$set('time', sec);
+
+            if(sec == 0) {
+                // clearInterval(timer);
+                vue.changeQ();
+                sec = countTime;
+                vue.$set('time', sec);
+            }
         }
     }
 });
@@ -95,6 +125,8 @@ var vue = new Vue({
 // --------------------------------------------------------
 // 初回描画
 vue.getJson();
+
+var timer = setInterval(vue.countDowon, intervalTime);
 
 </script>
 
