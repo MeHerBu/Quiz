@@ -6,7 +6,7 @@
 <title>問題画面 - Quiz</title>
 <style>
 [v-cloak] { display:none }
-.ranking img { width: 20px; height: 20px; }
+.quiz__ranking img { width: 20px; height: 20px; }
 </style>
 </head>
 <body>
@@ -16,26 +16,31 @@
 </header>
 
 <main v-cloak>
-    <section>
-        <h2 v-show="num">Q.{{num}}</h2>
-        <p>{{quiz}}</p>
-        <ol>
+    <section class="quiz" v-if="scrn.a">
+        <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
+        <p class="quiz__title">{{quiz}}</p>
+        <button class="quiz__btn-start" v-on="click: startQ()">クイズスタート！</button>
+    </section>
+
+    <section class="quiz" v-if="scrn.b">
+        <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
+        <p class="quiz__title">{{quiz}}</p>
+        <ol class="quiz__answer">
            <li v-repeat="ex">{{$value}}</li>
         </ol>
+        <button class="quiz__btn-start" v-on="click: rankingQ()">ランキング</button>
     </section>
-    <time>あと{{time}}秒</time>
-    <button id="btn_next" v-on="click: changeQ()">Next</button>
-</main>
 
-<hr>
-<main class="ranking">
-    <h2>ランキング</h2>
-    <ol>
-        <li><img src="https://avatars2.githubusercontent.com/u/8349175?v=3&s=460">moritakenji</li>
-        <li><img src="https://avatars2.githubusercontent.com/u/6580754?v=3&s=460">sao-murakami</li>
-        <li><img src="https://avatars2.githubusercontent.com/u/7579236?v=3&s=460">y-nishino</li>
-        <li><img src="https://avatars0.githubusercontent.com/u/6120877?v=3&s=460">mdb-konno</li>
-    </ol>
+    <section class="quiz" v-if="scrn.c">
+        <h2 class="quiz__title">ランキング</h2>
+        <ol class="quiz__ranking">
+            <li><img src="https://avatars2.githubusercontent.com/u/8349175?v=3&s=460">moritakenji</li>
+            <li><img src="https://avatars2.githubusercontent.com/u/6580754?v=3&s=460">sao-murakami</li>
+            <li><img src="https://avatars2.githubusercontent.com/u/7579236?v=3&s=460">y-nishino</li>
+            <li><img src="https://avatars0.githubusercontent.com/u/6120877?v=3&s=460">mdb-konno</li>
+        </ol>
+        <button class="quiz__btn-chang" v-on="click: changeQ()" v-attr="disabled: disabled">次の問題へ</button>
+    </section>
 </main>
 
 <footer>©MeHerBu</footer>
@@ -49,7 +54,6 @@
 // --------------------------------------------------------
 // Setting
 // --------------------------------------------------------
-var $btn_next = $('#btn_next');
 var intervalTime = 1000; // 1秒
 var countTime = 5;
 var sec = countTime;
@@ -64,7 +68,13 @@ var vue = new Vue({
         num: '',
         quiz: '',
         ex: '',
-        time: sec
+        time: sec,
+        disabled: '',
+        scrn : {
+            a : true,
+            b : false,
+            c : false
+        }
     },
 
     methods:{
@@ -77,24 +87,38 @@ var vue = new Vue({
             });
         },
 
-        // 問題を切り替える処理
+        // 問題スタート画面へ
+        startQ: function(){
+            this.$set('scrn.a', false);
+            this.$set('scrn.b', true);
+        },
+
+        // ランキング画面へ
+        rankingQ: function(){
+            this.$set('scrn.b', false);
+            this.$set('scrn.c', true);
+        },
+
+        // 次の問題へ
         changeQ: function(){
-            var that = this;
             ++actNum;
 
             // 次の問題をデータバインド
             if(actNum <= maxNum) {
-                that.$set('num', actNum);
-                that.$set('quiz', qaJson['q' + actNum].question);
-                that.$set('ex', _.values(qaJson['q' + actNum].answer));
+                this.$set('num', actNum);
+                this.$set('quiz', qaJson['q' + actNum].question);
+                this.$set('ex', _.values(qaJson['q' + actNum].answer));
             }
             if(actNum == maxNum) {
                 // 最後の問題になったら、NextボタンをOFFにする
-                $btn_next.attr('disabled', 'disabled');
+                this.$set('disabled', 'disabled');
             }
 
             // 回答画面にデータを送信
-            vue.sendDS(actNum, that.$get('ex'));
+            vue.sendDS(actNum, this.$get('ex'));
+
+            this.$set('scrn.a', true);
+            this.$set('scrn.c', false);
         },
 
         // データストア
@@ -126,7 +150,7 @@ var vue = new Vue({
 // 初回描画
 vue.getJson();
 
-var timer = setInterval(vue.countDowon, intervalTime);
+// var timer = setInterval(vue.countDowon, intervalTime);
 
 </script>
 
