@@ -2,7 +2,12 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0">
 <title>問題画面 - Quiz</title>
+<style>
+[v-cloak] { display:none }
+.quiz__ranking img { width: 20px; height: 20px; }
+</style>
 </head>
 <body>
 
@@ -10,54 +15,142 @@
     <h1>Quiz</h1>
 </header>
 
-<main>
-    <section>
-        <h2>第1問</h2>
-        <p>1</p>
-        <p>2</p>
-        <p>3</p>
-        <p>4</p>
+<main v-cloak>
+    <section class="quiz" v-if="scrn.a">
+        <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
+        <p class="quiz__title">{{quiz}}</p>
+        <button class="quiz__btn-start" v-on="click: startQ()">クイズスタート！</button>
     </section>
-    <time>あと8秒</time>
-    <button id="btn_next">次へ</button>
+
+    <section class="quiz" v-if="scrn.b">
+        <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
+        <p class="quiz__title">{{quiz}}</p>
+        <ol class="quiz__answer">
+           <li v-repeat="ex">{{$value}}</li>
+        </ol>
+        <button class="quiz__btn-start" v-on="click: rankingQ()">ランキング</button>
+    </section>
+
+    <section class="quiz" v-if="scrn.c">
+        <h2 class="quiz__title">ランキング</h2>
+        <ol class="quiz__ranking">
+            <li><img src="https://avatars2.githubusercontent.com/u/8349175?v=3&s=460">moritakenji</li>
+            <li><img src="https://avatars2.githubusercontent.com/u/6580754?v=3&s=460">sao-murakami</li>
+            <li><img src="https://avatars2.githubusercontent.com/u/7579236?v=3&s=460">y-nishino</li>
+            <li><img src="https://avatars0.githubusercontent.com/u/6120877?v=3&s=460">mdb-konno</li>
+        </ol>
+        <button class="quiz__btn-chang" v-on="click: changeQ()" v-attr="disabled: disabled">次の問題へ</button>
+    </section>
 </main>
 
 <footer>©MeHerBu</footer>
 
 <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
-<script src="http://cdn.mlkcca.com/v0.2.8/milkcocoa.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
+<script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'></script>
+<script src="src/js/app.js"></script>
 <script>
-var milkcocoa = new MilkCocoa('https://io-zi5c0nhz1.mlkcca.com');
-var ds = milkcocoa.dataStore('test');
-var $btn_next = $('#btn_next');
-
 // --------------------------------------------------------
-// 関数
+// Setting
 // --------------------------------------------------------
-
-
-
-// --------------------------------------------------------
-// ユーザーアクション
-// --------------------------------------------------------
-$btn_next.on('click', function(){
-    ds.send({
-        content : 'Hello!'
-    });
-});
-
-
-
-// --------------------------------------------------------
-// イベント通知
-// --------------------------------------------------------
-
+var intervalTime = 1000; // 1秒
+var countTime = 5;
+var sec = countTime;
 
 
 // --------------------------------------------------------
 // View
 // --------------------------------------------------------
+var vue = new Vue({
+    el: 'main',
+    data: {
+        num: '',
+        quiz: '',
+        ex: '',
+        time: sec,
+        disabled: '',
+        scrn : {
+            a : true,
+            b : false,
+            c : false
+        }
+    },
+
+    methods:{
+        // JSONを取得
+        getJson: function(){
+            $.getJSON(jsonPath).done(function(data){
+                qaJson = data;
+                getObjLength(qaJson);
+                vue.changeQ(qaJson);
+            });
+        },
+
+        // 問題スタート画面へ
+        startQ: function(){
+            this.$set('scrn.a', false);
+            this.$set('scrn.b', true);
+        },
+
+        // ランキング画面へ
+        rankingQ: function(){
+            this.$set('scrn.b', false);
+            this.$set('scrn.c', true);
+        },
+
+        // 次の問題へ
+        changeQ: function(){
+            ++actNum;
+
+            // 次の問題をデータバインド
+            if(actNum <= maxNum) {
+                this.$set('num', actNum);
+                this.$set('quiz', qaJson['q' + actNum].question);
+                this.$set('ex', _.values(qaJson['q' + actNum].answer));
+            }
+            if(actNum == maxNum) {
+                // 最後の問題になったら、NextボタンをOFFにする
+                this.$set('disabled', 'disabled');
+            }
+
+            // 回答画面にデータを送信
+            vue.sendDS(actNum, this.$get('ex'));
+
+            this.$set('scrn.a', true);
+            this.$set('scrn.c', false);
+        },
+
+        // データストア
+        sendDS: function(actNum, ex){
+            DS.send({
+                DSactNum : actNum, // 問題数
+                DSmaxNum : _.values(ex).length // 回答数
+            });
+        },
+
+        countDowon: function(){
+            sec--;
+            vue.$set('time', sec);
+
+            if(sec == 0) {
+                // clearInterval(timer);
+                vue.changeQ();
+                sec = countTime;
+                vue.$set('time', sec);
+            }
+        }
+    }
+});
+
+
+// --------------------------------------------------------
+// Load
+// --------------------------------------------------------
+// 初回描画
+vue.getJson();
+
+// var timer = setInterval(vue.countDowon, intervalTime);
 
 </script>
 

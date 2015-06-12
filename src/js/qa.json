@@ -1,0 +1,35 @@
+{
+    "q1": {
+        "type" : "image",
+        "question" : "HTMLの最新バージョンは？",
+        "correct" : "a3",
+        "answer" : {
+            "a1" : "HTML2",
+            "a2" : "HTML4",
+            "a3" : "HTML5",
+            "a4" : "HTML7"
+        }
+    },
+    "q2": {
+        "type" : "text",
+        "question" : "CSSの最新バージョンは？",
+        "correct" : "a3",
+        "answer" : {
+            "a1" : "CSS2",
+            "a2" : "CSS3",
+            "a3" : "CSS5",
+            "a4" : "CSS10"
+        }
+    },
+    "q3": {
+        "type" : "text",
+        "question" : "ECMAScriptの最新バージョンは？",
+        "correct" : "a4",
+        "answer" : {
+            "a1" : "ECMAScript 3",
+            "a2" : "ECMAScript 4",
+            "a3" : "ECMAScript 5",
+            "a4" : "ECMAScript 6"
+        }
+    }
+}
