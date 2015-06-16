@@ -6,7 +6,6 @@
 <title>問題画面 - Quiz</title>
 <style>
 [v-cloak] { display:none }
-.quiz__ranking img { width: 20px; height: 20px; }
 </style>
 </head>
 <body>
@@ -16,10 +15,11 @@
 </header>
 
 <main v-cloak>
+
     <section class="quiz" v-if="scrn.a">
         <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
         <p class="quiz__title">{{quiz}}</p>
-        <button class="quiz__btn-start" v-on="click: startQ()">クイズスタート！</button>
+        <button class="quiz__btn" v-on="click: startQ()">クイズスタート！</button>
     </section>
 
     <section class="quiz" v-if="scrn.b">
@@ -28,19 +28,24 @@
         <ol class="quiz__answer">
            <li v-repeat="ex">{{$value}}</li>
         </ol>
-        <button class="quiz__btn-start" v-on="click: rankingQ()">ランキング</button>
+        <div>
+            <time>{{time}}秒</time>
+            <meter value="{{time * 20}}" max="100"></meter>
+        </div>
+        <button class="quiz__btn" v-on="click: rankingQ()">ランキング</button>
     </section>
 
     <section class="quiz" v-if="scrn.c">
         <h2 class="quiz__title">ランキング</h2>
         <ol class="quiz__ranking">
-            <li><img src="https://avatars2.githubusercontent.com/u/8349175?v=3&s=460">moritakenji</li>
-            <li><img src="https://avatars2.githubusercontent.com/u/6580754?v=3&s=460">sao-murakami</li>
-            <li><img src="https://avatars2.githubusercontent.com/u/7579236?v=3&s=460">y-nishino</li>
-            <li><img src="https://avatars0.githubusercontent.com/u/6120877?v=3&s=460">mdb-konno</li>
+            <li>k-morita</li>
+            <li>sao-murakami</li>
+            <li>y-nishino</li>
+            <li>k-konno</li>
         </ol>
-        <button class="quiz__btn-chang" v-on="click: changeQ()" v-attr="disabled: disabled">次の問題へ</button>
+        <button class="quiz__btn" v-on="click: changeQ()" v-attr="disabled: disabled">次の問題へ</button>
     </section>
+
 </main>
 
 <footer>©MeHerBu</footer>
@@ -57,6 +62,7 @@
 var intervalTime = 1000; // 1秒
 var countTime = 5;
 var sec = countTime;
+var timer;
 
 
 // --------------------------------------------------------
@@ -89,6 +95,7 @@ var vue = new Vue({
 
         // 問題スタート画面へ
         startQ: function(){
+            vue.countStart();
             this.$set('scrn.a', false);
             this.$set('scrn.b', true);
         },
@@ -129,13 +136,17 @@ var vue = new Vue({
             });
         },
 
+        countStart: function(){
+            timer = setInterval(vue.countDowon, intervalTime);
+        },
+
         countDowon: function(){
             sec--;
             vue.$set('time', sec);
 
             if(sec == 0) {
-                // clearInterval(timer);
-                vue.changeQ();
+                clearInterval(timer);
+                vue.rankingQ();
                 sec = countTime;
                 vue.$set('time', sec);
             }
@@ -149,8 +160,6 @@ var vue = new Vue({
 // --------------------------------------------------------
 // 初回描画
 vue.getJson();
-
-// var timer = setInterval(vue.countDowon, intervalTime);
 
 </script>
 

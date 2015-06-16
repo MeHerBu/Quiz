@@ -48,10 +48,8 @@ var vue = new Vue({
     methods:{
         // 問題を切り替える処理
         changeQ: function(n, max){
-            var that = this;
-
-            that.$set('num', n);
-            that.$set('exA', _.range(max));
+            this.$set('num', n);
+            this.$set('exA', _.range(max));
         }
     }
 });
