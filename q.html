@@ -135,6 +135,7 @@ var vue = new Vue({
                 DSactNum : actNum, // 問題数
                 DSmaxNum : _.values(ex).length // 回答数
             });
+            DS.set(msgID, {DSactNum : actNum});
         },
 
         countStart: function(){

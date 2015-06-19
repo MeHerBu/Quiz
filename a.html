@@ -46,6 +46,24 @@ var vue = new Vue({
     },
 
     methods:{
+        // JSONを取得
+        getJson: function(){
+            $.getJSON(jsonPath).done(function(data){
+                qaJson = data;
+                getObjLength(qaJson);
+                vue.getActQuiz(qaJson);
+            });
+        },
+
+        getActQuiz: function(qaJson){
+            var _this = this;
+
+            DS.get(msgID, function(err, data){
+                _this.$set('num', data.value.DSactNum);
+                _this.$set('exA', _.range(getObjLength(qaJson.q1.answer)));
+            });
+        },
+
         // 問題を切り替える処理
         changeQ: function(n, max){
             this.$set('num', n);
@@ -61,6 +79,8 @@ var vue = new Vue({
 DS.on('send', function(data){
     vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
 });
+// 初回描画
+vue.getJson();
 
 </script>
 
