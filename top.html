@@ -15,16 +15,15 @@
 </header>
 <section class="form-wrapper">
     <h1>Sign In</h1>
-    <form>
+    <form action="./point/index.html" method="post">
         <div class="form-item">
             <label for="email"></label>
             <input type="text" name="email" required="required" placeholder="e-mail" id="email">
             <span>@mediba.jp</span>
         </div>
         <div class="button-panel">
-            <input type="submit" class="button" title="Sign In" value="Sign In"></input>
+            <input type="submit" class="button" onClick="setUserName();" title="Sign In" value="Sign In"></input>
         </div>
-        <button >click</button>
     </form>
     <div class="form-footer">
     </div>
@@ -34,10 +33,10 @@
 </footer>
     <!--<script type="text/javascript" src="quiz.js"></script>-->
     <script>
-    function set(){
-        var userId = $('#email').val();
-        var storage = sessionStorage;
-        storage.setItem(userId);
+    function setUserName(){
+        var userID = document.getElementById('email').value;
+        var storage = localStorage;
+        storage.setItem('userID',userID);
     }
     </script>
 
