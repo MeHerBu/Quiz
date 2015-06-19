@@ -29,8 +29,8 @@
            <li v-repeat="ex">{{$value}}</li>
         </ol>
         <div>
-            <time>{{time}}秒</time>
-            <meter value="{{time * 20}}" max="100"></meter>
+            <meter value="{{nowTime * (100 / setTime)}}" low="30" high="60" optimum="100" max="100"></meter> <br>
+            <time>{{nowTime}}秒</time>
         </div>
         <button class="quiz__btn" v-on="click: rankingQ()">ランキング</button>
     </section>
@@ -60,7 +60,7 @@
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000; // 1秒
-var countTime = 5;
+var countTime = 10;
 var sec = countTime;
 var timer;
 
@@ -74,7 +74,8 @@ var vue = new Vue({
         num: '',
         quiz: '',
         ex: '',
-        time: sec,
+        setTime: countTime,
+        nowTime: sec,
         disabled: '',
         scrn : {
             a : true,
@@ -142,13 +143,13 @@ var vue = new Vue({
 
         countDowon: function(){
             sec--;
-            vue.$set('time', sec);
+            vue.$set('nowTime', sec);
 
             if(sec == 0) {
                 clearInterval(timer);
                 vue.rankingQ();
                 sec = countTime;
-                vue.$set('time', sec);
+                vue.$set('nowTime', sec);
             }
         }
     }
