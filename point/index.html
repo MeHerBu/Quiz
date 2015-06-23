@@ -11,7 +11,7 @@
 
         問題番号:<input type="text" name="no"><br>
         <h3>データ登録</h3>
-        userID:<input type="text" name="userID"><br>
+        userID:<input type="text" name="userID" id="userID"><br>
         point:<input type="text" name="point"><br>
         <button onClick="send()">送信</button>
         <br><br><br><br><br>
@@ -25,5 +25,11 @@
 
 
 </div>
+<script>
+((function(){
+    var storage = localStorage;
+    $('#userID').val(storage.getItem('userID'));
+}))();
+</script>
 </body>
 </html>
