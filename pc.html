@@ -26,7 +26,7 @@ section { width: 600px; margin: 0 auto;}
 
 <main v-cloak>
 
-    <section class="quiz" v-if="scrn.open">
+    <section class="quiz" v-if="scrn.s1">
         <h2>リアルタイム早押しクイズゲーム</h2>
         <h3>ルール</h3>
         <p>サインインしたら、クイズが始まるまで、しばらくお待ちください。</p>
@@ -35,13 +35,13 @@ section { width: 600px; margin: 0 auto;}
         <button class="quiz__btn btn btn-default" v-on="click: openQ()">始める！</button>
     </section>
 
-    <section class="quiz" v-if="scrn.a">
+    <section class="quiz" v-if="scrn.s2">
         <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
         <p class="quiz__title">{{quiz}}</p>
         <button class="quiz__btn btn btn-default" v-on="click: startQ()">クイズスタート！</button>
     </section>
 
-    <section class="quiz" v-if="scrn.b">
+    <section class="quiz" v-if="scrn.s3">
         <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
         <p class="quiz__title">{{quiz}}</p>
         <ol class="quiz__answer">
@@ -51,10 +51,9 @@ section { width: 600px; margin: 0 auto;}
             <meter value="{{nowTime * (100 / setTime)}}" low="30" high="60" optimum="100" max="100"></meter> <br>
             <time>{{nowTime}}秒</time>
         </div>
-        <button class="quiz__btn btn btn-default" v-on="click: rankingQ()">ランキング</button>
     </section>
 
-    <section class="quiz" v-if="scrn.c">
+    <section class="quiz" v-if="scrn.s4">
         <h2 class="quiz__title">ランキング</h2>
         <ol class="quiz__ranking">
             <li>k-morita</li>
@@ -82,10 +81,10 @@ section { width: 600px; margin: 0 auto;}
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000; // 1秒
-var countTime = 10;
+var countTime = 5;
 var sec = countTime;
+var nowScrn = 's1'; // 初回スクリーン名
 var timer;
-
 
 // --------------------------------------------------------
 // View
@@ -100,10 +99,10 @@ var vue = new Vue({
         nowTime: sec,
         disabled: '',
         scrn : {
-            open : true,
-            a : false,
-            b : false,
-            c : false
+            s1 : true,
+            s2 : false,
+            s3 : false,
+            s4 : false
         }
     },
 
@@ -116,24 +115,28 @@ var vue = new Vue({
             });
         },
 
+        // 次の画面に切り替え
+        toScrn: function(nextScrn){
+            this.$set('scrn.' + nowScrn, false);
+            this.$set('scrn.' + nextScrn, true);
+            nowScrn = nextScrn;
+        },
+
         // 問題表示画面へ
         openQ: function(){
-            this.$set('scrn.open', false);
-            this.$set('scrn.a', true);
             vue.changeQ(qaJson);
+            vue.toScrn('s2');
         },
 
         // 問題スタート
         startQ: function(){
             vue.countStart();
-            this.$set('scrn.a', false);
-            this.$set('scrn.b', true);
+            vue.toScrn('s3');
         },
 
         // ランキング画面へ
         rankingQ: function(){
-            this.$set('scrn.b', false);
-            this.$set('scrn.c', true);
+            vue.toScrn('s4');
         },
 
         // 次の問題へ
@@ -154,8 +157,8 @@ var vue = new Vue({
             // 回答画面にデータを送信
             vue.sendDS(actNum, this.$get('ex'));
 
-            this.$set('scrn.a', true);
-            this.$set('scrn.c', false);
+            // 画面切り替え
+            vue.toScrn('s2');
         },
 
         // データストア
@@ -169,6 +172,9 @@ var vue = new Vue({
 
         // カウント開始
         countStart: function(){
+            clearInterval(timer);
+            sec = countTime;
+            vue.$set('nowTime', sec);
             timer = setInterval(vue.countDowon, intervalTime);
         },
 
@@ -177,6 +183,7 @@ var vue = new Vue({
             sec--;
             vue.$set('nowTime', sec);
 
+            // 0秒になったらランキング画面に切り替え
             if(sec == 0) {
                 clearInterval(timer);
                 vue.rankingQ();

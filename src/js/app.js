@@ -5,7 +5,7 @@ var milkcocoa = new MilkCocoa('maxi9ffclh3.mlkcca.com');
 var DS = milkcocoa.dataStore('quiz');
 var msgID = 'ib34agsc19m3qd5';
 var jsonPath = './src/js/qa.json'; // JSONのパス
-var actNum = 0; // 現在のスライド
+var actNum = 0; // 現在の問題画面
 var maxNum = 0; // 問題数
 var qaJson = '';
 

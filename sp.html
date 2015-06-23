@@ -82,6 +82,7 @@ var vue = new Vue({
 DS.on('send', function(data){
     vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
 });
+
 // 初回描画
 vue.getJson();
 
