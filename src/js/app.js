@@ -17,6 +17,10 @@ var qaJson = '';
 // 問題数を取得
 function getObjLength(data){
     var n = 0;
-    for(var i in data){ maxNum++; n++;}
+    for(var i in data){
+        maxNum++;
+        n++;
+    }
+
     return n;
 }
