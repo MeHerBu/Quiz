@@ -20,7 +20,8 @@ section { width: 600px; margin: 0 auto;}
 </head>
 <body>
 
-<audio src="src/audio/mondai_girl.webm" autoplay loop preload="auto"></audio>
+<audio src="src/audio/mondai_girl.webm" autoplay loop preload="auto" id="audio_bgm"></audio>
+<audio src="src/audio/thinking.webm" loop preload="auto" id="audio_thinking"></audio>
 
 <header class="header">
     <h1>Quiz</h1>
@@ -88,6 +89,13 @@ var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
 
+// オーディオ
+var El_audioBgm = document.getElementById('audio_bgm');
+var El_audioThinking = document.getElementById('audio_thinking');
+// 音量
+El_audioBgm.volume = 1;
+El_audioThinking.volume = 0.2;
+
 // --------------------------------------------------------
 // View
 // --------------------------------------------------------
@@ -139,6 +147,10 @@ var vue = new Vue({
         // ランキング画面へ
         rankingQ: function(){
             vue.toScrn('s4');
+
+            El_audioBgm.play();
+            El_audioThinking.pause();
+            El_audioThinking.currentTime = 0;
         },
 
         // 次の問題へ
@@ -178,6 +190,9 @@ var vue = new Vue({
             sec = countTime;
             vue.$set('nowTime', sec);
             timer = setInterval(vue.countDowon, intervalTime);
+
+            El_audioBgm.pause();
+            El_audioThinking.play();
         },
 
         // カウントダウン
