@@ -6,11 +6,34 @@
 <title>解答画面 - Quiz</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link href="src/css/quiz.css" rel="stylesheet">
-<style>[v-cloak] { display:none }</style>
+<style>
+[v-cloak] { display:none }
+.answer__btn-group li {
+    display: inline-block;
+}
+.answer__btn-group input[type="radio"] {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.answer__btn-group input[type="radio"] + label {
+    padding: 12px 24px;
+    color: #337ab7;
+    background-color: #fff;
+    border: 1px solid #ddd;
+
+}
+.answer__btn-group input[type="radio"]:checked + label {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
+
+</style>
 </head>
 <body>
 
-<header>
+<header class="header">
     <h1>Quiz</h1>
 </header>
 
@@ -20,15 +43,18 @@
     </section>
 
     <section>
-        <ol>
-           <li v-repeat="exA">
-                <label><input type="radio" name="exA" value="{{$value}}"></label>
-            </li>
-        </ol>
+        <nav>
+            <ul class="answer__btn-group">
+                <li v-repeat="exA"><input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value}}"><label for="answer__btn-{{$value + 1}}" v-on="click: btnAct({{$value + 1}})">{{$value}}</label></li>
+                <!-- <li><a href="#" class="answer__btn-{{$value + 1}}" v-on="click: btnAct({{$value + 1}})">{{$value + 1}}</a></li> -->
+            </ul>
+        </nav>
     </section>
 </main>
 
-<footer>©MeHerBu</footer>
+<footer class="footer">
+    <p>©MeHerBu</p>
+</footer>
 
 <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -44,7 +70,7 @@
 var vue = new Vue({
     el: 'main',
     data: {
-        num: 1,
+        num: '',
         exA: []
     },
 
@@ -71,6 +97,9 @@ var vue = new Vue({
         changeQ: function(n, max){
             this.$set('num', n);
             this.$set('exA', _.range(max));
+        },
+
+        btnAct: function(){
         }
     }
 });
@@ -83,6 +112,18 @@ DS.on('send', function(data){
     vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
 });
 
+
+// --------------------------------------------------------
+// ユーザーアクション
+// --------------------------------------------------------
+// $('.answer__btn-group').on('click', '.answer__btn', function() {
+//     alert(1);
+// });
+
+
+// --------------------------------------------------------
+// Load
+// --------------------------------------------------------
 // 初回描画
 vue.getJson();
 
