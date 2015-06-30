@@ -6,30 +6,43 @@
     <script src="main.js"></script>
 </head>
 <body>
-<h1>Test</h1>
+
+<h1>問題</h1>
 <div>
-
-        問題番号:<input type="text" name="no"><br>
-        <h3>データ登録</h3>
-        userID:<input type="text" name="userID" id="userID"><br>
-        point:<input type="text" name="point"><br>
-        <button onClick="send()">送信</button>
-        <br><br><br><br><br>
-
-        <h3>データ取得</h3>
-        <button onClick="get()">取得</button>
-
-        <br><br><br><br><br>
-        <div class="js-result"></div>
-
-
-
+    問題番号：
+    <input type="radio" name="question" value="1" checked="checked">1
+    <input type="radio" name="question" value="2">2
+    <input type="radio" name="question" value="3">3
 </div>
-<script>
-((function(){
-    var storage = localStorage;
-    $('#userID').val(storage.getItem('userID'));
-}))();
-</script>
+<br>
+<h2>①データ登録</h2>
+<h3>1.問題スタート時間登録</h3>
+<button onClick="start()">問題のスタート時間登録</button><br><br><br>
+
+
+<h3>2.回答の登録</h3>
+<div>
+    userID：<input type="text" name="userID">
+</div>
+<div>
+    回答番号:
+    <input type="radio" name="anser" value="1" checked="checked">1
+    <input type="radio" name="anser" value="2"> 2
+    <input type="radio" name="anser" value="3">3
+</div>
+<br>
+<button onClick="send()">送信</button>
+<br>
+<br>
+<br>
+<br>
+
+<h2>②データ取得</h2>
+<button onClick="get()">取得</button>
+<br>
+
+
+<div class="js-result"></div>
+
 </body>
 </html>
