@@ -46,11 +46,12 @@
         <nav>
             <ul class="answer__btn-group">
                 <li v-repeat="exA">
-                    <input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value}}">
-                    <label for="answer__btn-{{$value + 1}}" v-on="click: btnAct({{$value + 1}})">{{$value + 1}}</label>
+                    <input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value + 1}}" v-on="click: selectBtn($value + 1);">
+                    <label for="answer__btn-{{$value + 1}}">{{$value + 1}}</label>
                 </li>
             </ul>
         </nav>
+        <button class="quiz__btn btn btn-default" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
     </section>
 </main>
 
@@ -67,13 +68,20 @@
 
 <script>
 // --------------------------------------------------------
+// Settin
+// --------------------------------------------------------
+var user = 'dummyUser' //ダミー
+
+// --------------------------------------------------------
 // View
 // --------------------------------------------------------
 var vue = new Vue({
     el: 'main',
     data: {
         num: '',
-        exA: []
+        actNum: '',
+        exA: [],
+        disabled: ''
     },
 
     methods:{
@@ -86,10 +94,11 @@ var vue = new Vue({
             });
         },
 
+        // アクティブなクイズを取得
         getActQuiz: function(qaJson){
             var _this = this;
 
-            DS_Quiz.get(msgID, function(err, data){
+            DS_quiz.get(msgID, function(err, data){
                 _this.$set('num', data.value.DSactNum);
                 _this.$set('exA', _.range(getObjLength(qaJson.q1.answer)));
             });
@@ -101,7 +110,20 @@ var vue = new Vue({
             this.$set('exA', _.range(max));
         },
 
-        btnAct: function(){
+        // 問題選択
+        selectBtn: function(val){
+            this.$set('actNum', val);
+        },
+
+        // ファイナルアンサー
+        finalBtn: function(val){
+            DS_anser.push({user : this.$get('actNum')});
+            this.$set('disabled', 'disabled');
+        },
+
+        // ボタンアクティブ
+        finalBtnAct: function(){
+            this.$set('disabled', '');
         }
     }
 });
@@ -110,14 +132,15 @@ var vue = new Vue({
 // --------------------------------------------------------
 // イベント通知
 // --------------------------------------------------------
-DS_Quiz.on('send', function(data){
-    vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
+DS_quiz.on('send', function(data){
+    var type = data.value.type;
+
+    if (type == 'act') { //アクティブナンバー受信
+        vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
+    } else if (type == 'start') { //問題スタート受信
+        vue.finalBtnAct();
+    }
 });
-
-
-// --------------------------------------------------------
-// ユーザーアクション
-// --------------------------------------------------------
 
 
 

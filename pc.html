@@ -140,6 +140,7 @@ var vue = new Vue({
 
         // 問題スタート
         startQ: function(){
+            vue.sendDS('start');
             vue.countStart();
             vue.toScrn('s3');
         },
@@ -169,19 +170,24 @@ var vue = new Vue({
             }
 
             // 回答画面にデータを送信
-            vue.sendDS(actNum, this.$get('ex'));
+            vue.sendDS('act', actNum, this.$get('ex'));
 
             // 画面切り替え
             vue.toScrn('s2');
         },
 
-        // データストア
-        sendDS: function(actNum, ex){
-            DS_Quiz.send({
-                DSactNum : actNum, // 問題数
-                DSmaxNum : _.values(ex).length // 回答数
-            });
-            DS_Quiz.set(msgID, {DSactNum : actNum});
+        // スマホに送信
+        sendDS: function(type, actNum, ex){
+            if(type == 'start') { //問題スタート送信
+                DS_quiz.send({type : 'start'});
+            } else if(type == 'act') { //問題アクティブ送信
+                DS_quiz.send({
+                    type : 'act',
+                    DSactNum : actNum, // 問題数
+                    DSmaxNum : _.values(ex).length // 回答数
+                });
+                DS_quiz.set(msgID, {DSactNum : actNum});
+            }
         },
 
         // カウント開始
