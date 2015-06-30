@@ -2,7 +2,10 @@
 // セッティング
 // --------------------------------------------------------
 var milkcocoa = new MilkCocoa('maxi9ffclh3.mlkcca.com');
-var DS = milkcocoa.dataStore('quiz');
+var DS_Quiz = milkcocoa.dataStore('quiz');
+var anserDataStore = milkcocoa.dataStore('Anser');
+var qeationDataStore = milkcocoa.dataStore('Qeation');
+
 var msgID = 'ib34agsc19m3qd5';
 var jsonPath = './src/js/qa.json'; // JSONのパス
 var actNum = 0; // 現在の問題画面

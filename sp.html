@@ -45,8 +45,10 @@
     <section>
         <nav>
             <ul class="answer__btn-group">
-                <li v-repeat="exA"><input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value}}"><label for="answer__btn-{{$value + 1}}" v-on="click: btnAct({{$value + 1}})">{{$value}}</label></li>
-                <!-- <li><a href="#" class="answer__btn-{{$value + 1}}" v-on="click: btnAct({{$value + 1}})">{{$value + 1}}</a></li> -->
+                <li v-repeat="exA">
+                    <input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value}}">
+                    <label for="answer__btn-{{$value + 1}}" v-on="click: btnAct({{$value + 1}})">{{$value + 1}}</label>
+                </li>
             </ul>
         </nav>
     </section>
@@ -87,7 +89,7 @@ var vue = new Vue({
         getActQuiz: function(qaJson){
             var _this = this;
 
-            DS.get(msgID, function(err, data){
+            DS_Quiz.get(msgID, function(err, data){
                 _this.$set('num', data.value.DSactNum);
                 _this.$set('exA', _.range(getObjLength(qaJson.q1.answer)));
             });
@@ -108,7 +110,7 @@ var vue = new Vue({
 // --------------------------------------------------------
 // イベント通知
 // --------------------------------------------------------
-DS.on('send', function(data){
+DS_Quiz.on('send', function(data){
     vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
 });
 
@@ -116,9 +118,7 @@ DS.on('send', function(data){
 // --------------------------------------------------------
 // ユーザーアクション
 // --------------------------------------------------------
-// $('.answer__btn-group').on('click', '.answer__btn', function() {
-//     alert(1);
-// });
+
 
 
 // --------------------------------------------------------

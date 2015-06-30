@@ -20,9 +20,6 @@ section { width: 600px; margin: 0 auto;}
 </head>
 <body>
 
-<audio src="src/audio/mondai_girl.webm" autoplay loop preload="auto" id="audio_bgm"></audio>
-<audio src="src/audio/thinking.webm" loop preload="auto" id="audio_thinking"></audio>
-
 <header class="header">
     <h1>Quiz</h1>
 </header>
@@ -72,6 +69,9 @@ section { width: 600px; margin: 0 auto;}
 <footer class="footer">
     <p>©MeHerBu</p>
 </footer>
+
+<audio src="src/audio/mondai_girl.webm" autoplay loop preload="auto" id="audio_bgm"></audio>
+<audio src="src/audio/thinking.webm" loop preload="auto" id="audio_thinking"></audio>
 
 <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -177,11 +177,11 @@ var vue = new Vue({
 
         // データストア
         sendDS: function(actNum, ex){
-            DS.send({
+            DS_Quiz.send({
                 DSactNum : actNum, // 問題数
                 DSmaxNum : _.values(ex).length // 回答数
             });
-            DS.set(msgID, {DSactNum : actNum});
+            DS_Quiz.set(msgID, {DSactNum : actNum});
         },
 
         // カウント開始
