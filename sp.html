@@ -81,7 +81,7 @@ var vue = new Vue({
         num: '',
         actNum: '',
         exA: [],
-        disabled: ''
+        disabled: 'disabled'
     },
 
     methods:{
@@ -117,13 +117,22 @@ var vue = new Vue({
 
         // ファイナルアンサー
         finalBtn: function(val){
-            DS_anser.push({user : this.$get('actNum')});
+            DS_anser.push({
+                user : user, // ユーザー名
+                qNum: this.$get('num'), // 現在の問題数
+                aNum: this.$get('actNum') // 回答ナンバー
+            });
             this.$set('disabled', 'disabled');
         },
 
         // ボタンアクティブ
         finalBtnAct: function(){
             this.$set('disabled', '');
+        },
+
+        // ボタン非アクティブ
+        finalBtnDis: function(){
+            this.$set('disabled', 'disabled');
         }
     }
 });
@@ -139,6 +148,8 @@ DS_quiz.on('send', function(data){
         vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
     } else if (type == 'start') { //問題スタート受信
         vue.finalBtnAct();
+    } else if (type == 'disabled') { //問題スタート受信
+        vue.finalBtnDis();
     }
 });
 

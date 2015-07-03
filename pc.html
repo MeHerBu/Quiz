@@ -96,6 +96,7 @@ var El_audioThinking = document.getElementById('audio_thinking');
 El_audioBgm.volume = 1;
 El_audioThinking.volume = 0.2;
 
+
 // --------------------------------------------------------
 // View
 // --------------------------------------------------------
@@ -119,6 +120,8 @@ var vue = new Vue({
     methods:{
         // JSONを取得
         getJson: function(){
+            var _this = this;
+
             $.getJSON(jsonPath).done(function(data){
                 qaJson = data;
                 getObjLength(qaJson);
@@ -148,6 +151,7 @@ var vue = new Vue({
         // ランキング画面へ
         rankingQ: function(){
             vue.toScrn('s4');
+            vue.sendDS('disabled');
 
             El_audioBgm.play();
             El_audioThinking.pause();
@@ -180,6 +184,8 @@ var vue = new Vue({
         sendDS: function(type, actNum, ex){
             if(type == 'start') { //問題スタート送信
                 DS_quiz.send({type : 'start'});
+            } else if(type == 'disabled') { //問題スタート送信
+                DS_quiz.send({type : 'disabled'});
             } else if(type == 'act') { //問題アクティブ送信
                 DS_quiz.send({
                     type : 'act',
@@ -223,6 +229,7 @@ var vue = new Vue({
 // --------------------------------------------------------
 // 初回描画
 vue.getJson();
+
 
 </script>
 
