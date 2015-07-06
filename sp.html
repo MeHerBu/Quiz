@@ -38,11 +38,23 @@
 </header>
 
 <main v-cloak>
-    <section>
-        <h2>Q.{{num}}</h2>
+
+    <section class="form-wrapper" v-if="signOut">
+        <h1>Sign In</h1>
+        <div class="form-item">
+            <label for="email"></label>
+            <input type="text" name="email" required="required" placeholder="e-mail" id="email" v-model="user">
+            <span>@mediba.jp</span>
+        </div>
+        <div class="button-panel">
+            <button class="button" v-on="click: signInAct();">Sign In</button>
+        </div>
+        <div class="form-footer"></div>
     </section>
 
-    <section>
+    <section v-if="signIn">
+        <h2>Q.{{num}}</h2>
+        <h3>こんにちは.{{num}}さん</h3>
         <nav>
             <ul class="answer__btn-group">
                 <li v-repeat="exA">
@@ -53,6 +65,7 @@
         </nav>
         <button class="quiz__btn btn btn-default" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
     </section>
+
 </main>
 
 <footer class="footer">
@@ -70,7 +83,8 @@
 // --------------------------------------------------------
 // Settin
 // --------------------------------------------------------
-var user = 'dummyUser' //ダミー
+// var user = 'dummyUser' //ダミー
+var $email = $('#email');
 
 // --------------------------------------------------------
 // View
@@ -81,7 +95,10 @@ var vue = new Vue({
         num: '',
         actNum: '',
         exA: [],
-        disabled: 'disabled'
+        disabled: 'disabled',
+        user: '',
+        signOut: true,
+        signIn: false
     },
 
     methods:{
@@ -92,6 +109,16 @@ var vue = new Vue({
                 getObjLength(qaJson);
                 vue.getActQuiz(qaJson);
             });
+        },
+
+        // サインイン処理
+        signInAct: function(){
+            var u = this.$get('user');
+
+            localStorage.setItem('user', u);
+            this.$set('user', u);
+            this.$set('signOut', false);
+            this.$set('signIn', true);
         },
 
         // アクティブなクイズを取得
@@ -118,7 +145,7 @@ var vue = new Vue({
         // ファイナルアンサー
         finalBtn: function(val){
             DS_anser.push({
-                user : user, // ユーザー名
+                user : this.$get('user'), // ユーザー名
                 qNum: this.$get('num'), // 現在の問題数
                 aNum: this.$get('actNum') // 回答ナンバー
             });
