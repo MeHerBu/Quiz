@@ -38,7 +38,6 @@
 </header>
 
 <main v-cloak>
-
     <section class="form-wrapper" v-if="signOut">
         <h1>Sign In</h1>
         <div class="form-item">
@@ -52,9 +51,9 @@
         <div class="form-footer"></div>
     </section>
 
-    <section v-if="signIn">
+    <section class="answer__wappper" v-if="signIn">
         <h2>Q.{{num}}</h2>
-        <h3>こんにちは.{{num}}さん</h3>
+        <p>こんにちは.{{num}}さん</p>
         <nav>
             <ul class="answer__btn-group">
                 <li v-repeat="exA">
@@ -65,7 +64,6 @@
         </nav>
         <button class="quiz__btn btn btn-default" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
     </section>
-
 </main>
 
 <footer class="footer">
@@ -76,14 +74,13 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
-<script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'></script>
+<script src="https://cdn.mlkcca.com/v2.0.0/milkcocoa.js"></script>
 <script src="src/js/app.js"></script>
 
 <script>
 // --------------------------------------------------------
-// Settin
+// Setting
 // --------------------------------------------------------
-
 
 
 // --------------------------------------------------------
@@ -171,15 +168,20 @@ var vue = new Vue({
 DS_quiz.on('send', function(data){
     var type = data.value.type;
 
-    if (type == 'act') { //アクティブナンバー受信
-        vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
-    } else if (type == 'start') { //問題スタート受信
-        vue.finalBtnAct();
-    } else if (type == 'disabled') { //問題スタート受信
-        vue.finalBtnDis();
+    switch(type){
+        case 'act':
+            vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
+            break;
+
+        case 'start':
+            vue.finalBtnAct();
+            break;
+
+        case 'disabled':
+            vue.finalBtnDis();
+            break;
     }
 });
-
 
 
 // --------------------------------------------------------
