@@ -78,6 +78,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
 <script src="https://cdn.mlkcca.com/v2.0.0/milkcocoa.js"></script>
 <script src="src/js/app.js"></script>
 
@@ -85,6 +86,7 @@
 // --------------------------------------------------------
 // Setting
 // --------------------------------------------------------
+var startMo, endMo, time;
 
 
 // --------------------------------------------------------
@@ -149,10 +151,14 @@ var vue = new Vue({
 
         // ファイナルアンサー
         finalBtn: function(val){
+            endMo = moment();
+            time = endMo.diff(startMo, 'milliseconds') / 1000;
+
             DS_anser.push({
                 user : this.$get('user'), // ユーザー名
                 qNum : this.$get('num'), // 現在の問題数
-                aNum : this.$get('actNum') // 回答ナンバー
+                aNum : this.$get('actNum'), // 回答ナンバー
+                time : time // 回答時間
             });
             this.$set('disabled', 'disabled');
         },
@@ -183,6 +189,7 @@ DS_quiz.on('send', function(data){
 
         case 'start':
             vue.finalBtnAct();
+            startMo = moment();
             break;
 
         case 'disabled':
@@ -197,6 +204,7 @@ DS_quiz.on('send', function(data){
 // --------------------------------------------------------
 // 初回描画
 vue.getJson();
+
 
 </script>
 
