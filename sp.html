@@ -14,14 +14,18 @@
 .answer__btn-group input[type="radio"] {
     -webkit-appearance: none;
     appearance: none;
+    visibility: none;
+    display: none;
 }
 
 .answer__btn-group input[type="radio"] + label {
-    padding: 12px 24px;
+    box-sizing: border-box;
+    padding: 20px 36px;
+    margin: 0 4px;
     color: #337ab7;
     background-color: #fff;
     border: 1px solid #ddd;
-
+    border-radius: 4px;
 }
 .answer__btn-group input[type="radio"]:checked + label {
     color: #fff;
@@ -53,7 +57,7 @@
 
     <section class="answer__wappper" v-if="signIn">
         <h2>Q.{{num}}</h2>
-        <p>こんにちは.{{num}}さん</p>
+        <p>こんにちは.{{user}}さん</p>
         <nav>
             <ul class="answer__btn-group">
                 <li v-repeat="exA">
@@ -112,10 +116,14 @@ var vue = new Vue({
         signInAct: function(){
             var u = this.$get('user');
 
-            localStorage.setItem('user', u);
-            this.$set('user', u);
-            this.$set('signOut', false);
-            this.$set('signIn', true);
+            if(u){
+                localStorage.setItem('user', u);
+                this.$set('user', u);
+                this.$set('signOut', false);
+                this.$set('signIn', true);
+            } else {
+                alert('アカウント名を入力してください');
+            }
         },
 
         // アクティブなクイズを取得
@@ -143,8 +151,8 @@ var vue = new Vue({
         finalBtn: function(val){
             DS_anser.push({
                 user : this.$get('user'), // ユーザー名
-                qNum: this.$get('num'), // 現在の問題数
-                aNum: this.$get('actNum') // 回答ナンバー
+                qNum : this.$get('num'), // 現在の問題数
+                aNum : this.$get('actNum') // 回答ナンバー
             });
             this.$set('disabled', 'disabled');
         },
