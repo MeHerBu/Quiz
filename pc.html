@@ -15,6 +15,9 @@ meter {
 }
 
 section { width: 600px; margin: 0 auto;}
+.quiz__answer { font-size: 30px; line-height: 2em;}
+.quiz__ranking { font-size: 30px;}
+.quiz__ranking time { margin-left: 2em; color: #999;}
 
 </style>
 </head>
@@ -55,10 +58,10 @@ section { width: 600px; margin: 0 auto;}
     <section class="quiz" v-if="scrn.s4">
         <h2 class="quiz__title">ランキング</h2>
         <ol class="quiz__ranking">
-            <li>k-morita</li>
-            <li>sao-murakami</li>
-            <li>y-nishino</li>
-            <li>k-konno</li>
+            <li v-repeat="rankData">
+                <span>{{user}}<span>
+                <time>{{time}}秒</time>
+            </li>
         </ol>
         <button class="quiz__btn btn btn-default" v-on="click: changeQ()" v-attr="disabled: disabled">次の問題へ</button>
     </section>
@@ -82,7 +85,7 @@ section { width: 600px; margin: 0 auto;}
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000; // 1秒
-var countTime = 5;
+var countTime = 10;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
@@ -107,6 +110,7 @@ var vue = new Vue({
         setTime: countTime,
         nowTime: sec,
         disabled: '',
+        rankData: '',
         scrn : {
             s1 : true,
             s2 : false,
@@ -148,9 +152,30 @@ var vue = new Vue({
 
         // ランキング画面へ
         rankingQ: function(){
+            var _this = this;
+            var n = _this.$get('num');
+            var rankArray = [];
+
             vue.toScrn('s4');
             vue.sendDS('disabled');
 
+            // 回答データを取得
+            DS_anser.stream().next(function(err, data) {
+                // データを取得し、回答が合っている人だけ抽出
+                for(var i = 0; i < data.length; i++){
+                    if((n == data[i].value.qNum) && (data[i].value.aNum == qaJson['q' + n].correct.charAt(1))){
+                        var rankObj = {};
+                        rankObj.user = data[i].value.user;
+                        rankObj.time = data[i].value.time;
+                        rankArray.push(rankObj)
+                    }
+                }
+
+                var ranking = _.sortBy(rankArray, 'time'); // 回答時間が早い順にソート
+                _this.$set('rankData', ranking); // バインディング
+            });
+
+            // BGM再スタート
             El_audioBgm.play();
             El_audioThinking.pause();
             El_audioThinking.currentTime = 0;
