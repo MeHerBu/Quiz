@@ -4,7 +4,6 @@
 var milkcocoa = new MilkCocoa('maxi9ffclh3.mlkcca.com');
 var DS_quiz = milkcocoa.dataStore('quiz');
 var DS_anser = milkcocoa.dataStore('anser');
-// var DS_qeation = milkcocoa.dataStore('qeation');
 
 var msgID = 'ib34agsc19m3qd5';
 var jsonPath = './src/js/qa.json'; // JSONのパス

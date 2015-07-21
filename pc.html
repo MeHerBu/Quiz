@@ -16,7 +16,9 @@ meter {
 
 section { width: 600px; margin: 0 auto;}
 .quiz__answer { font-size: 30px; line-height: 2em;}
-.quiz__ranking { font-size: 30px;}
+.quiz__ranking { font-size: 18px;}
+.quiz__ranking .quiz__user{ color: #00f;}
+.quiz__ranking .quiz__point{ color: #000;}
 .quiz__ranking time { margin-left: 2em; color: #999;}
 
 </style>
@@ -31,8 +33,8 @@ section { width: 600px; margin: 0 auto;}
     <section class="quiz" v-if="scrn.s1">
         <h2>リアルタイム早押しクイズゲーム</h2>
         <h3>ルール</h3>
-        <p>サインインしたら、クイズが始まるまで、しばらくお待ちください。</p>
-        <p>クイズが開始されたら、お持ちのスマホ端末から正解だと思うボタンを押してね。</p>
+        <p>サインインしたら、クイズが始まるまで、しばらくお待ちください。（リロード禁止）</p>
+        <p>クイズが開始されたら、お持ちのスマホ端末から正解だと思うボタンを押し、ファイナルアンサーボタンを押してね。</p>
         <p>＜クイズおばさんをこの辺に入れたい＞</p>
         <button class="quiz__btn btn btn-default" v-on="click: openQ()">始める！</button>
     </section>
@@ -63,7 +65,19 @@ section { width: 600px; margin: 0 auto;}
                 <time>{{time}}秒</time>
             </li>
         </ol>
-        <button class="quiz__btn btn btn-default" v-on="click: changeQ()" v-attr="disabled: disabled">次の問題へ</button>
+        <button class="quiz__btn btn btn-default" v-on="click: changeQ()" v-if="changeBtn">次の問題へ</button>
+        <button class="quiz__btn btn btn-default" v-on="click: totalRanking()" v-if="totalRankingBtn">総合ランキングへ</button>
+    </section>
+
+    <section class="quiz" v-if="scrn.s5">
+        <h2 class="quiz__title">総合ランキング</h2>
+        <ol class="quiz__ranking">
+            <li v-repeat="rankTotal">
+                <span class="quiz__user">{{user}}<span>
+                <span class="quiz__point">正解数：{{point}}</span>
+                <time>トータル{{time}}秒</time>
+            </li>
+        </ol>
     </section>
 </main>
 
@@ -85,7 +99,7 @@ section { width: 600px; margin: 0 auto;}
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000; // 1秒
-var countTime = 10;
+var countTime = 1;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
@@ -109,13 +123,16 @@ var vue = new Vue({
         ex: '',
         setTime: countTime,
         nowTime: sec,
-        disabled: '',
+        changeBtn: true,
+        totalRankingBtn: false,
         rankData: '',
+        rankTotal: '',
         scrn : {
             s1 : true,
             s2 : false,
             s3 : false,
-            s4 : false
+            s4 : false,
+            s5 : false
         }
     },
 
@@ -170,7 +187,6 @@ var vue = new Vue({
                         rankArray.push(rankObj)
                     }
                 }
-
                 var ranking = _.sortBy(rankArray, 'time'); // 回答時間が早い順にソート
                 _this.$set('rankData', ranking); // バインディング
             });
@@ -185,6 +201,9 @@ var vue = new Vue({
         changeQ: function(){
             ++actNum;
 
+            // 画面切り替え
+            vue.toScrn('s2');
+
             // 次の問題をデータバインド
             if(actNum <= maxNum) {
                 this.$set('num', actNum);
@@ -192,15 +211,61 @@ var vue = new Vue({
                 this.$set('ex', _.values(qaJson['q' + actNum].answer));
             }
             if(actNum == maxNum) {
-                // 最後の問題になったら、NextボタンをOFFにする
-                this.$set('disabled', 'disabled');
+                // 最後の問題になったら、総合ランキングボタンを表示
+                this.$set('changeBtn', false);
+                this.$set('totalRankingBtn', true);
             }
 
             // 回答画面にデータを送信
             vue.sendDS('act', actNum, this.$get('ex'));
+        },
 
-            // 画面切り替え
-            vue.toScrn('s2');
+        // 総合ランキング画面へ
+        totalRanking: function(){
+            vue.toScrn('s5');
+
+            var _this = this;
+            var n = _this.$get('num');
+
+            // 回答データを取得
+            DS_anser.stream().next(function(err, data) {
+                var totalArray = [];
+                // データを取得し、回答が合っている人だけ抽出
+                for(var i = 0; i < data.length; i++){
+                    for(var x = 1; x <= maxNum; x++){
+                        if((x == data[i].value.qNum) && (data[i].value.aNum == qaJson['q' + x].correct.charAt(1))){
+                            var rankObj = {};
+                            rankObj.user = data[i].value.user;
+                            rankObj.time = data[i].value.time;
+                            totalArray.push(rankObj)
+                        }
+                    }
+
+                }
+
+                var totalRanking = _.sortBy(totalArray, 'time'); // 回答時間が早い順にソート
+                var rankingGroup = _.groupBy(totalRanking, function(obj){
+                    return obj.user;
+                });
+
+                var rankObjAry = [];
+                $.each(rankingGroup, function(key, val) {
+                var rankObjFix = {};
+                    rankObjFix.user = key;
+                    rankObjFix.point = val.length;
+
+                    var ary = [];
+                    $.each(val, function(key, val2){ // 複数正解したユーザーの時間をまとめる
+                        ary.push(val2.time);
+                    });
+                    rankObjFix.time = _.reduce(ary, function(memo, num){ return memo + num; }, 0); // 時間を合算
+                    rankObjAry.push(rankObjFix);
+                });
+
+                var rankingFix = _.sortBy(rankObjAry, function(item){ return -item.point; }); // 正解数が多い順にソート
+
+                _this.$set('rankTotal', rankingFix);
+            });
         },
 
         // スマホに送信

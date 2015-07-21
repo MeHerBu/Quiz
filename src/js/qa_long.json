@@ -1,0 +1,57 @@
+{
+    "q1": {
+        "type" : "image",
+        "question" : "HTMLの最新バージョンは？",
+        "correct" : "a3",
+        "answer" : {
+            "a1" : "HTML2",
+            "a2" : "HTML4",
+            "a3" : "HTML5",
+            "a4" : "HTML7"
+        }
+    },
+    "q2": {
+        "type" : "text",
+        "question" : "CSSの最新バージョンは？",
+        "correct" : "a2",
+        "answer" : {
+            "a1" : "CSS2",
+            "a2" : "CSS3",
+            "a3" : "CSS5",
+            "a4" : "CSS10"
+        }
+    },
+    "q3": {
+        "type" : "text",
+        "question" : "ECMAScriptの最新バージョンは？",
+        "correct" : "a4",
+        "answer" : {
+            "a1" : "ECMAScript 3",
+            "a2" : "ECMAScript 4",
+            "a3" : "ECMAScript 5",
+            "a4" : "ECMAScript 6"
+        }
+    },
+    "q4": {
+        "type" : "text",
+        "question" : "HTMLは何の略？",
+        "correct" : "a3",
+        "answer" : {
+            "a1" : "はやい、つよい、まじで、ラッキー",
+            "a2" : "ハイパータスクマックラングエージ",
+            "a3" : "ハイパーテキストマークアップラングエージ",
+            "a4" : "ハイドテキストマークアップラングエージ"
+        }
+    },
+    "q5": {
+        "type" : "text",
+        "question" : "ドラえもんの体重は？",
+        "correct" : "a3",
+        "answer" : {
+            "a1" : "12.5kg",
+            "a2" : "93,3kg",
+            "a3" : "129.3kg",
+            "a4" : "1000Kg"
+        }
+    }
+}

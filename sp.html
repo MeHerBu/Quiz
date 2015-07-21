@@ -120,12 +120,16 @@ var vue = new Vue({
 
             if(u){
                 localStorage.setItem('user', u);
-                this.$set('user', u);
-                this.$set('signOut', false);
-                this.$set('signIn', true);
+                vue.quizIn();
             } else {
                 alert('アカウント名を入力してください');
             }
+        },
+
+        quizIn: function(u){
+            this.$set('user', u);
+            this.$set('signOut', false);
+            this.$set('signIn', true);
         },
 
         // アクティブなクイズを取得
@@ -204,6 +208,11 @@ DS_quiz.on('send', function(data){
 // --------------------------------------------------------
 // 初回描画
 vue.getJson();
+
+// ログイン後は問題画面に切り替わる
+if(localStorage.getItem('user')){
+    vue.quizIn(localStorage.getItem('user'));
+}
 
 
 </script>
