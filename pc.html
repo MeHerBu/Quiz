@@ -93,12 +93,12 @@ section { width: 600px; margin: 0 auto;}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
 <script src="https://cdn.mlkcca.com/v2.0.0/milkcocoa.js"></script>
-<script src="src/js/app.js"></script>
+<script src="src/js/common.js"></script>
 <script>
 // --------------------------------------------------------
 // Setting
 // --------------------------------------------------------
-var intervalTime = 1000; // 1秒
+var intervalTime = 1000;
 var countTime = 1;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
@@ -225,44 +225,46 @@ var vue = new Vue({
             vue.toScrn('s5');
 
             var _this = this;
-            var n = _this.$get('num');
+            var totalAry = [];
+            var totalGroupAry = [];
 
             // 回答データを取得
             DS_anser.stream().next(function(err, data) {
-                var totalArray = [];
-                // データを取得し、回答が合っている人だけ抽出
+                // 全データ抽出
                 for(var i = 0; i < data.length; i++){
+                    // 問題数分処理
                     for(var x = 1; x <= maxNum; x++){
+                        // 現在の問題数を回答データをまず見て、その中で正解の場合は以下処理をする
                         if((x == data[i].value.qNum) && (data[i].value.aNum == qaJson['q' + x].correct.charAt(1))){
+                            // 回答ユーザーと時間を配列に格納していく
                             var rankObj = {};
                             rankObj.user = data[i].value.user;
                             rankObj.time = data[i].value.time;
-                            totalArray.push(rankObj)
+                            totalAry.push(rankObj)
                         }
                     }
 
                 }
 
-                var totalRanking = _.sortBy(totalArray, 'time'); // 回答時間が早い順にソート
-                var rankingGroup = _.groupBy(totalRanking, function(obj){
-                    return obj.user;
-                });
+                var totalRanking = _.sortBy(totalAry, 'time'); // 回答時間が早い順にソート
+                var rankingGroup = _.groupBy(totalRanking, function(obj){ return obj.user; }); // 重複ユーザーをグルーピング
 
-                var rankObjAry = [];
+                // グルーピングしたデータ処理
                 $.each(rankingGroup, function(key, val) {
-                var rankObjFix = {};
-                    rankObjFix.user = key;
-                    rankObjFix.point = val.length;
+                    var rankObjGrp = {};
+                        rankObjGrp.user = key;
+                        rankObjGrp.point = val.length; // 正解数
+                    var reduceAry = []; // 合算用に配列作成
 
-                    var ary = [];
-                    $.each(val, function(key, val2){ // 複数正解したユーザーの時間をまとめる
-                        ary.push(val2.time);
+                    $.each(val, function(key2, val2){ // 複数正解したユーザーの時間をまとめる
+                        reduceAry.push(val2.time);
                     });
-                    rankObjFix.time = _.reduce(ary, function(memo, num){ return memo + num; }, 0); // 時間を合算
-                    rankObjAry.push(rankObjFix);
+
+                    rankObjGrp.time = _.reduce(reduceAry, function(x, y){ return x + y; }, 0); // 時間を合算
+                    totalGroupAry.push(rankObjGrp);
                 });
 
-                var rankingFix = _.sortBy(rankObjAry, function(item){ return -item.point; }); // 正解数が多い順にソート
+                var rankingFix = _.sortBy(totalGroupAry, function(obj){ return -obj.point; }); // 正解数が多い順にソート
 
                 _this.$set('rankTotal', rankingFix);
             });
