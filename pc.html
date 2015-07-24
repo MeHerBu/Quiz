@@ -15,26 +15,27 @@ meter {
 }
 
 section { width: 600px; margin: 0 auto;}
+.quiz__answer { font-size: 30px; line-height: 2em;}
+.quiz__ranking { font-size: 18px;}
+.quiz__ranking .quiz__user{ color: #00f;}
+.quiz__ranking .quiz__point{ color: #000;}
+.quiz__ranking time { margin-left: 2em; color: #999;}
 
 </style>
 </head>
 <body>
-
-<audio src="src/audio/mondai_girl.webm" autoplay loop preload="auto" id="audio_bgm"></audio>
-<audio src="src/audio/thinking.webm" loop preload="auto" id="audio_thinking"></audio>
 
 <header class="header">
     <h1>Quiz</h1>
 </header>
 
 <main v-cloak>
-
     <section class="quiz" v-if="scrn.s1">
         <h2>リアルタイム早押しクイズゲーム</h2>
         <h3>ルール</h3>
-        <p>サインインしたら、クイズが始まるまで、しばらくお待ちください。</p>
-        <p>クイズが開始されたら、お持ちのスマホ端末から正解だと思うボタンを押してね。</p>
-        <p>＜クイズおじさんをこの辺に入れたい＞</p>
+        <p>サインインしたら、クイズが始まるまで、しばらくお待ちください。（リロード禁止）</p>
+        <p>クイズが開始されたら、お持ちのスマホ端末から正解だと思うボタンを押し、ファイナルアンサーボタンを押してね。</p>
+        <p>＜クイズおばさんをこの辺に入れたい＞</p>
         <button class="quiz__btn btn btn-default" v-on="click: openQ()">始める！</button>
     </section>
 
@@ -59,32 +60,46 @@ section { width: 600px; margin: 0 auto;}
     <section class="quiz" v-if="scrn.s4">
         <h2 class="quiz__title">ランキング</h2>
         <ol class="quiz__ranking">
-            <li>k-morita</li>
-            <li>sao-murakami</li>
-            <li>y-nishino</li>
-            <li>k-konno</li>
+            <li v-repeat="rankData">
+                <span>{{user}}<span>
+                <time>{{time}}秒</time>
+            </li>
         </ol>
-        <button class="quiz__btn btn btn-default" v-on="click: changeQ()" v-attr="disabled: disabled">次の問題へ</button>
+        <button class="quiz__btn btn btn-default" v-on="click: changeQ()" v-if="changeBtn">次の問題へ</button>
+        <button class="quiz__btn btn btn-default" v-on="click: totalRanking()" v-if="totalRankingBtn">総合ランキングへ</button>
     </section>
 
+    <section class="quiz" v-if="scrn.s5">
+        <h2 class="quiz__title">総合ランキング</h2>
+        <ol class="quiz__ranking">
+            <li v-repeat="rankTotal">
+                <span class="quiz__user">{{user}}<span>
+                <span class="quiz__point">正解数：{{point}}</span>
+                <time>トータル{{time}}秒</time>
+            </li>
+        </ol>
+    </section>
 </main>
 
 <footer class="footer">
     <p>©MeHerBu</p>
 </footer>
 
+<audio src="src/audio/mondai_girl.webm" id="audio_bgm" autoplay loop preload="auto"></audio>
+<audio src="src/audio/thinking.webm" id="audio_thinking" loop preload="auto"></audio>
+
 <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
-<script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'></script>
-<script src="src/js/app.js"></script>
+<script src="https://cdn.mlkcca.com/v2.0.0/milkcocoa.js"></script>
+<script src="src/js/common.js"></script>
 <script>
 // --------------------------------------------------------
 // Setting
 // --------------------------------------------------------
-var intervalTime = 1000; // 1秒
-var countTime = 5;
+var intervalTime = 1000;
+var countTime = 10;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
@@ -95,6 +110,7 @@ var El_audioThinking = document.getElementById('audio_thinking');
 // 音量
 El_audioBgm.volume = 1;
 El_audioThinking.volume = 0.2;
+
 
 // --------------------------------------------------------
 // View
@@ -107,18 +123,24 @@ var vue = new Vue({
         ex: '',
         setTime: countTime,
         nowTime: sec,
-        disabled: '',
+        changeBtn: true,
+        totalRankingBtn: false,
+        rankData: '',
+        rankTotal: '',
         scrn : {
             s1 : true,
             s2 : false,
             s3 : false,
-            s4 : false
+            s4 : false,
+            s5 : false
         }
     },
 
     methods:{
         // JSONを取得
         getJson: function(){
+            var _this = this;
+
             $.getJSON(jsonPath).done(function(data){
                 qaJson = data;
                 getObjLength(qaJson);
@@ -140,14 +162,36 @@ var vue = new Vue({
 
         // 問題スタート
         startQ: function(){
+            vue.sendDS('start');
             vue.countStart();
             vue.toScrn('s3');
         },
 
         // ランキング画面へ
         rankingQ: function(){
-            vue.toScrn('s4');
+            var _this = this;
+            var n = _this.$get('num');
+            var rankArray = [];
 
+            vue.toScrn('s4');
+            vue.sendDS('disabled');
+
+            // 回答データを取得
+            DS_anser.stream().next(function(err, data) {
+                // データを取得し、回答が合っている人だけ抽出
+                for(var i = 0; i < data.length; i++){
+                    if((n == data[i].value.qNum) && (data[i].value.aNum == qaJson['q' + n].correct.charAt(1))){
+                        var rankObj = {};
+                        rankObj.user = data[i].value.user;
+                        rankObj.time = data[i].value.time;
+                        rankArray.push(rankObj)
+                    }
+                }
+                var ranking = _.sortBy(rankArray, 'time'); // 回答時間が早い順にソート
+                _this.$set('rankData', ranking); // バインディング
+            });
+
+            // BGM再スタート
             El_audioBgm.play();
             El_audioThinking.pause();
             El_audioThinking.currentTime = 0;
@@ -157,6 +201,9 @@ var vue = new Vue({
         changeQ: function(){
             ++actNum;
 
+            // 画面切り替え
+            vue.toScrn('s2');
+
             // 次の問題をデータバインド
             if(actNum <= maxNum) {
                 this.$set('num', actNum);
@@ -164,24 +211,79 @@ var vue = new Vue({
                 this.$set('ex', _.values(qaJson['q' + actNum].answer));
             }
             if(actNum == maxNum) {
-                // 最後の問題になったら、NextボタンをOFFにする
-                this.$set('disabled', 'disabled');
+                // 最後の問題になったら、総合ランキングボタンを表示
+                this.$set('changeBtn', false);
+                this.$set('totalRankingBtn', true);
             }
 
             // 回答画面にデータを送信
-            vue.sendDS(actNum, this.$get('ex'));
-
-            // 画面切り替え
-            vue.toScrn('s2');
+            vue.sendDS('act', actNum, this.$get('ex'));
         },
 
-        // データストア
-        sendDS: function(actNum, ex){
-            DS.send({
-                DSactNum : actNum, // 問題数
-                DSmaxNum : _.values(ex).length // 回答数
+        // 総合ランキング画面へ
+        totalRanking: function(){
+            vue.toScrn('s5');
+
+            var _this = this;
+            var totalAry = [];
+            var totalGroupAry = [];
+
+            // 回答データを取得
+            DS_anser.stream().next(function(err, data) {
+                // 全データ抽出
+                for(var i = 0; i < data.length; i++){
+                    // 問題数分処理
+                    for(var x = 1; x <= maxNum; x++){
+                        // 現在の問題数を回答データをまず見て、その中で正解の場合は以下処理をする
+                        if((x == data[i].value.qNum) && (data[i].value.aNum == qaJson['q' + x].correct.charAt(1))){
+                            // 回答ユーザーと時間を配列に格納していく
+                            var rankObj = {};
+                            rankObj.user = data[i].value.user;
+                            rankObj.time = data[i].value.time;
+                            totalAry.push(rankObj)
+                        }
+                    }
+
+                }
+
+                var totalRanking = _.sortBy(totalAry, 'time'); // 回答時間が早い順にソート
+                var rankingGroup = _.groupBy(totalRanking, function(obj){ return obj.user; }); // 重複ユーザーをグルーピング
+
+                // グルーピングしたデータ処理
+                $.each(rankingGroup, function(key, val) {
+                    var rankObjGrp = {};
+                        rankObjGrp.user = key;
+                        rankObjGrp.point = val.length; // 正解数
+                    var reduceAry = []; // 合算用に配列作成
+
+                    $.each(val, function(key2, val2){ // 複数正解したユーザーの時間をまとめる
+                        reduceAry.push(val2.time);
+                    });
+
+                    rankObjGrp.time = _.reduce(reduceAry, function(x, y){ return x + y; }, 0); // 時間を合算
+                    totalGroupAry.push(rankObjGrp);
+                });
+
+                var rankingFix = _.sortBy(totalGroupAry, function(obj){ return -obj.point; }); // 正解数が多い順にソート
+
+                _this.$set('rankTotal', rankingFix);
             });
-            DS.set(msgID, {DSactNum : actNum});
+        },
+
+        // スマホに送信
+        sendDS: function(type, actNum, ex){
+            if(type == 'start') { //問題スタート送信
+                DS_quiz.send({type : 'start'});
+            } else if(type == 'disabled') { //問題スタート送信
+                DS_quiz.send({type : 'disabled'});
+            } else if(type == 'act') { //問題アクティブ送信
+                DS_quiz.send({
+                    type : 'act',
+                    DSactNum : actNum, // 問題数
+                    DSmaxNum : _.values(ex).length // 回答数
+                });
+                DS_quiz.set(msgID, {DSactNum : actNum}); //現在の問題数をDBに登録
+            }
         },
 
         // カウント開始
@@ -217,6 +319,7 @@ var vue = new Vue({
 // --------------------------------------------------------
 // 初回描画
 vue.getJson();
+
 
 </script>
 
