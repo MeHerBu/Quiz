@@ -8,20 +8,21 @@
 <link href="src/css/quiz.css" rel="stylesheet">
 <style>
 [v-cloak] { display:none }
+.answer__btn-group { margin: 0; padding: 0;}
 .answer__btn-group li {
     display: inline-block;
+    list-style: none;
+    margin: 0 4px;
 }
 .answer__btn-group input[type="radio"] {
-    -webkit-appearance: none;
-    appearance: none;
+    -webkit-appearance: none; appearance: none;
     visibility: none;
     display: none;
 }
 
 .answer__btn-group input[type="radio"] + label {
     box-sizing: border-box;
-    padding: 20px 36px;
-    margin: 0 4px;
+    padding: 14px 24px;
     color: #337ab7;
     background-color: #fff;
     border: 1px solid #ddd;
@@ -32,6 +33,8 @@
     background-color: #337ab7;
     border-color: #337ab7;
 }
+
+.quiz__btn__final { margin-top: 20px;}
 
 </style>
 </head>
@@ -57,7 +60,7 @@
 
     <section class="answer__wappper" v-if="signIn">
         <h2>Q.{{num}}</h2>
-        <p>こんにちは.{{user}}さん</p>
+        <p>こんにちは、{{user}}さん</p>
         <nav>
             <ul class="answer__btn-group">
                 <li v-repeat="exA">
@@ -66,7 +69,7 @@
                 </li>
             </ul>
         </nav>
-        <button class="quiz__btn btn btn-default" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
+        <button class="quiz__btn__final btn btn-default" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
     </section>
 </main>
 
@@ -155,16 +158,20 @@ var vue = new Vue({
 
         // ファイナルアンサー
         finalBtn: function(val){
-            endMo = moment();
-            time = endMo.diff(startMo, 'milliseconds') / 1000;
+            if(this.$get('actNum') == ''){
+                alert('選択してください');
+            } else {
+                endMo = moment();
+                time = endMo.diff(startMo, 'milliseconds') / 1000;
 
-            DS_anser.push({
-                user : this.$get('user'), // ユーザー名
-                qNum : this.$get('num'), // 現在の問題数
-                aNum : this.$get('actNum'), // 回答ナンバー
-                time : time // 回答時間
-            });
-            this.$set('disabled', 'disabled');
+                DS_anser.push({
+                    user : this.$get('user'), // ユーザー名
+                    qNum : this.$get('num'), // 現在の問題数
+                    aNum : this.$get('actNum'), // 回答ナンバー
+                    time : time // 回答時間
+                });
+                this.$set('disabled', 'disabled');
+            }
         },
 
         // ボタンアクティブ

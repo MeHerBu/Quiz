@@ -9,5 +9,16 @@
             "a3" : "HTML5",
             "a4" : "HTML7"
         }
+    },
+    "q2": {
+        "type" : "image",
+        "question" : "HTMLの最新バージョンは？",
+        "correct" : "a3",
+        "answer" : {
+            "a1" : "HTML2",
+            "a2" : "HTML4",
+            "a3" : "HTML5",
+            "a4" : "HTML7"
+        }
     }
 }
