@@ -30,7 +30,7 @@ form { padding: 0 1.5em; }
 
 .button { background-color: #337ab7; border-color: #2e6da4; border: none; color: #fff; cursor: pointer; height: 50px; font-family: 'Open Sans', sans-serif; font-size: 16px; letter-spacing: 0.05em; text-align: center; text-transform: uppercase; transition: background 0.3s ease-in-out; width: 100%; border-radius: 6px; width: 300px; display: block; margin: 0 auto; }
 
-.button:hover { background: #ee3e52; }
+.button:hover, .button:active, .button:visited, .button:link { background: #337ab7; color: #fff; }
 
 .form-footer { font-size: 1em; padding: 2em 0; text-align: center; }
 
@@ -38,7 +38,7 @@ form { padding: 0 1.5em; }
 
 .form-footer a:hover { border-bottom: 1px dotted #8c8c8c; }
 
-.header { background: #fc7b95; color: #fff; }
+.header { background: #f16272; color: #fff; }
 .header h1 { padding: 10px; margin-top: 0px; font-size: 36px; }
 
 .footer { width: 100%; text-align: center; position: relative; bottom: 0px; display: block; }
@@ -87,8 +87,9 @@ form { padding: 0 1.5em; }
 .ranking--list .ranking__btn--sq { width: 860px; min-height: 100px; }
 .ranking--list .btn { margin: 20px; }
 .ranking--list .ranking__select-num { position: relative; padding: 35px 40px; margin: 0; font-size: 20px; font-weight: bold; width: 100px; background: #2EA497; color: #fff; display: table-cell; vertical-align: middle; }
-.ranking--list .ranking__text { display: table-cell; text-align: left; padding: 10px; font-size: 20px; width: 90%; vertical-align: middle; }
+.ranking--list .ranking__text { display: table-cell; text-align: left; padding: 10px; font-size: 20px; width: 80%; vertical-align: middle; }
 .ranking--list .raning_time { display: table-cell; width: 10%; vertical-align: middle; }
+.ranking--list .raning_answer { display: table-cell; width: 10%; vertical-align: middle; }
 
 .ranking__title { font-size: 30px; padding: 0 0 0 20px; }
 
