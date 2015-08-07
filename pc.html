@@ -99,7 +99,7 @@ section { width: 600px; margin: 0 auto;}
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000;
-var countTime = 10;
+var countTime = 1;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
@@ -183,7 +183,7 @@ var vue = new Vue({
                     if((n == data[i].value.qNum) && (data[i].value.aNum == qaJson['q' + n].correct.charAt(1))){
                         var rankObj = {};
                         rankObj.user = data[i].value.user;
-                        rankObj.time = data[i].value.time;
+                        rankObj.time = Math.floor(data[i].value.time * 100) / 100; // 小数点第2位で四捨五入
                         rankArray.push(rankObj)
                     }
                 }
