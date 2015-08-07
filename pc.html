@@ -9,18 +9,24 @@
 <style>
 [v-cloak] { display:none }
 meter {
+    box-sizing: border-box;
     border: 1px solid #ccc;
-    width: 600px; height: 20px;
+    width: 960px; height: 20px;
     box-shadow: 0px 0px 10px rgba(0,0,0,.1);
 }
 
-section { width: 600px; margin: 0 auto;}
-.quiz__answer { font-size: 30px; line-height: 2em;}
-.quiz__ranking { font-size: 18px;}
-.quiz__ranking .quiz__user{ color: #00f;}
-.quiz__ranking .quiz__point{ color: #000;}
-.quiz__ranking time { margin-left: 2em; color: #999;}
-
+section { box-sizing: border-box; width: 960px; margin: 0 auto; }
+.quiz__answer { font-size: 30px; line-height: 2em; }
+.quiz__ranking { font-size: 18px; padding: 0; margin-bottom: 0; list-style: none; counter-reset: rank; }
+.quiz__ranking li { background: #fff; border: 1px solid #eee; padding: 20px; display: -webkit-flexbox; display:flex; }
+.quiz__ranking li:before {counter-increment: rank; content: counter(rank); color: #aaa; font-size: 42px; margin-right: 1em;}
+.quiz__ranking li span,
+.quiz__ranking li time { display: block; line-height: 32px;}
+.quiz__ranking .quiz__user{ color: #4f9fcf; flex-basis: 200px;}
+.quiz__ranking .quiz__user:first-letter{ font-size: 32px;  border-radius: 50%; }
+.quiz__ranking .quiz__point{ background: #d44950; width: 40px; height: 40px; line-height: 40px; border-radius: 50%; color: #fff; text-align: center;}
+.quiz__ranking .quiz__time { margin-left: 2em; color: #999; flex-basis: 200px;  text-align: right; font-size: 22px;}
+.quiz__ranking .quiz__time:after { content: '秒'; font-size: 12px; margin-left: 0.2em; }
 </style>
 </head>
 <body>
@@ -61,8 +67,8 @@ section { width: 600px; margin: 0 auto;}
         <h2 class="quiz__title">ランキング</h2>
         <ol class="quiz__ranking">
             <li v-repeat="rankData">
-                <span>{{user}}<span>
-                <time>{{time}}秒</time>
+                <span class="quiz__user">{{user}}</span>
+                <time class="quiz__time">{{time}}</time>
             </li>
         </ol>
         <button class="quiz__btn btn btn-default" v-on="click: changeQ()" v-if="changeBtn">次の問題へ</button>
@@ -73,9 +79,9 @@ section { width: 600px; margin: 0 auto;}
         <h2 class="quiz__title">総合ランキング</h2>
         <ol class="quiz__ranking">
             <li v-repeat="rankTotal">
-                <span class="quiz__user">{{user}}<span>
-                <span class="quiz__point">正解数：{{point}}</span>
-                <time>トータル{{time}}秒</time>
+                <span class="quiz__user">{{user}}</span>
+                <span class="quiz__point">{{point}}</span>
+                <time class="quiz__time">{{time}}</time>
             </li>
         </ol>
     </section>
@@ -239,7 +245,7 @@ var vue = new Vue({
                             // 回答ユーザーと時間を配列に格納していく
                             var rankObj = {};
                             rankObj.user = data[i].value.user;
-                            rankObj.time = data[i].value.time;
+                            rankObj.time = Math.floor(data[i].value.time * 100) / 100; // 小数点第2位で四捨五入
                             totalAry.push(rankObj)
                         }
                     }
@@ -260,7 +266,7 @@ var vue = new Vue({
                         reduceAry.push(val2.time);
                     });
 
-                    rankObjGrp.time = _.reduce(reduceAry, function(x, y){ return x + y; }, 0); // 時間を合算
+                    rankObjGrp.time = Math.floor(_.reduce(reduceAry, function(x, y){ return x + y; }, 0) * 100) / 100; // 時間を合算し四捨五入
                     totalGroupAry.push(rankObjGrp);
                 });
 
@@ -312,7 +318,6 @@ var vue = new Vue({
         }
     }
 });
-
 
 // --------------------------------------------------------
 // Load
