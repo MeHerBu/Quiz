@@ -6,35 +6,21 @@
 <title>解答画面 - Quiz</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link href="src/css/quiz.css" rel="stylesheet">
+
 <style>
 [v-cloak] { display:none }
-.answer__btn-group { margin: 0; padding: 0;}
-.answer__btn-group li {
-    display: inline-block;
-    list-style: none;
-    margin: 0 4px;
-}
-.answer__btn-group input[type="radio"] {
-    -webkit-appearance: none; appearance: none;
-    visibility: none;
-    display: none;
-}
-
-.answer__btn-group input[type="radio"] + label {
-    box-sizing: border-box;
-    padding: 14px 24px;
-    color: #337ab7;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-.answer__btn-group input[type="radio"]:checked + label {
-    color: #fff;
-    background-color: #337ab7;
-    border-color: #337ab7;
-}
-
-.quiz__btn__final { margin-top: 20px;}
+.answer__wappper { text-align: center;}
+.answer__wappper h2 { margin: 20px 0; font-size: 24px; font-weight: normal; }
+.answer__wappper h2:first-letter { font-size: 16px; }
+.answer__name:before { content: 'ID'; display: inline-block; background: #bbb; color: #fff; padding: 4px; border-radius: 50%; margin-right: 0.5em; font-size: 10px; }
+.answer__btn-group { margin: 20px 0; padding: 0;}
+.answer__btn-group li { display: inline-block; list-style: none; margin: 0 4px; }
+.answer__btn-group input[type="radio"] { -webkit-appearance: none; appearance: none; visibility: none; display: none; }
+.answer__btn-group input[type="radio"] + label { box-sizing: border-box; padding: 14px 24px; color: #337ab7; background-color: #fff; border: 1px solid #ddd; border-radius: 4px; }
+.answer__btn-group input[type="radio"]:checked + label { color: #fff; background-color: #337ab7; border-color: #337ab7; }
+.quiz__btn__final { padding: 20px 16px;}
+.quiz__btn__final[disabled] { opacity: 0.2;}
+.footer { margin-top: 20px;}
 
 </style>
 </head>
@@ -59,17 +45,15 @@
     </section>
 
     <section class="answer__wappper" v-if="signIn">
+        <p class="answer__name">{{user}}</p>
         <h2>Q.{{num}}</h2>
-        <p>こんにちは、{{user}}さん</p>
-        <nav>
-            <ul class="answer__btn-group">
-                <li v-repeat="exA">
-                    <input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value + 1}}" v-on="click: selectBtn($value + 1);">
-                    <label for="answer__btn-{{$value + 1}}">{{$value + 1}}</label>
-                </li>
-            </ul>
-        </nav>
-        <button class="quiz__btn__final btn btn-default" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
+        <ul class="answer__btn-group">
+            <li v-repeat="exA">
+                <input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value + 1}}" v-on="click: selectBtn($value + 1);">
+                <label for="answer__btn-{{$value + 1}}">{{$value + 1}}</label>
+            </li>
+        </ul>
+        <button class="quiz__btn__final btn btn-success" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
     </section>
 </main>
 
