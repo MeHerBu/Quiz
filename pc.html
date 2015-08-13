@@ -17,6 +17,16 @@ meter {
 
 section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 .quiz__answer { font-size: 30px; line-height: 2em; }
+.quiz__answer img { animation: blur 5s ease; }
+@keyframes blur {
+  0% {
+    -webkit-filter: blur(100px)
+  }
+  100% {
+    -webkit-filter: blur(0)
+  }
+}
+/*.quiz__answer img { -webkit-filter: blur(30px); }*/
 .quiz__ranking { font-size: 18px; padding: 0; margin-bottom: 0; list-style: none; counter-reset: rank; }
 .quiz__ranking li { background: #fff; border: 1px solid #eee; padding: 20px; display: -webkit-flexbox; display:flex; }
 .quiz__ranking li:before {counter-increment: rank; content: counter(rank); color: #aaa; font-size: 42px; margin-right: 1em; }
@@ -83,7 +93,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
         <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
         <p class="quiz__title">{{quiz}}</p>
         <ol class="quiz__answer">
-           <li v-repeat="ex">{{$value}}</li>
+           <li v-repeat="ex"><img src="{{$value}}"></li>
         </ol>
         <div class="quiz__time">
             <meter value="{{nowTime * (100 / setTime)}}" low="30" high="60" optimum="100" max="100"></meter>
@@ -157,7 +167,6 @@ var vue = new Vue({
         num: '',
         quiz: '',
         ex: '',
-        // show: true,
         setTime: countTime,
         nowTime: sec,
         changeBtn: true,
@@ -202,6 +211,8 @@ var vue = new Vue({
             vue.sendDS('start');
             vue.countStart();
             vue.toScrn('s3');
+
+            console.log(vue);
         },
 
         // ランキング画面へ
