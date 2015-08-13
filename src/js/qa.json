@@ -4,10 +4,10 @@
         "question" : "HTMLの最新バージョンは？",
         "correct" : "a3",
         "answer" : {
-            "a1" : "HTML2",
-            "a2" : "HTML4",
-            "a3" : "HTML5",
-            "a4" : "HTML7"
+            "a1" : "http://internet.watch.impress.co.jp/img/iw/docs/421/219/html01_s.jpg",
+            "a2" : "http://www.doya-doya.com/wp-content/uploads/2011/02/img21.jpg",
+            "a3" : "http://image.itmedia.co.jp/news/articles/0609/05/yuo_Firefox.jpg",
+            "a4" : "http://i.gzn.jp/img/2013/12/03/ie-mascot-collateral-damage-studios/top.png"
         }
     },
     "q2": {
@@ -15,10 +15,10 @@
         "question" : "HTMLの最新バージョンは？",
         "correct" : "a3",
         "answer" : {
-            "a1" : "HTML2",
-            "a2" : "HTML4",
-            "a3" : "HTML5",
-            "a4" : "HTML7"
+            "a1" : "http://internet.watch.impress.co.jp/img/iw/docs/421/219/html01_s.jpg",
+            "a2" : "http://www.doya-doya.com/wp-content/uploads/2011/02/img21.jpg",
+            "a3" : "http://image.itmedia.co.jp/news/articles/0609/05/yuo_Firefox.jpg",
+            "a4" : "http://i.gzn.jp/img/2013/12/03/ie-mascot-collateral-damage-studios/top.png"
         }
     }
 }
