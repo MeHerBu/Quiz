@@ -6,28 +6,21 @@
 <title>解答画面 - Quiz</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link href="src/css/quiz.css" rel="stylesheet">
+
 <style>
 [v-cloak] { display:none }
-.answer__btn-group li {
-    display: inline-block;
-}
-.answer__btn-group input[type="radio"] {
-    -webkit-appearance: none;
-    appearance: none;
-}
-
-.answer__btn-group input[type="radio"] + label {
-    padding: 12px 24px;
-    color: #337ab7;
-    background-color: #fff;
-    border: 1px solid #ddd;
-
-}
-.answer__btn-group input[type="radio"]:checked + label {
-    color: #fff;
-    background-color: #337ab7;
-    border-color: #337ab7;
-}
+.answer__wappper { text-align: center;}
+.answer__wappper h2 { margin: 20px 0; font-size: 24px; font-weight: normal; }
+.answer__wappper h2:first-letter { font-size: 16px; }
+.answer__name:before { content: 'ID'; display: inline-block; background: #bbb; color: #fff; padding: 4px; border-radius: 50%; margin-right: 0.5em; font-size: 10px; }
+.answer__btn-group { margin: 20px 0; padding: 0;}
+.answer__btn-group li { display: inline-block; list-style: none; margin: 0 4px; }
+.answer__btn-group input[type="radio"] { -webkit-appearance: none; appearance: none; visibility: none; display: none; }
+.answer__btn-group input[type="radio"] + label { box-sizing: border-box; padding: 14px 24px; color: #337ab7; background-color: #fff; border: 1px solid #ddd; border-radius: 4px; }
+.answer__btn-group input[type="radio"]:checked + label { color: #fff; background-color: #337ab7; border-color: #337ab7; }
+.quiz__btn__final { padding: 20px 16px;}
+.quiz__btn__final[disabled] { opacity: 0.2;}
+.footer { margin-top: 20px;}
 
 </style>
 </head>
@@ -38,17 +31,29 @@
 </header>
 
 <main v-cloak>
-    <section>
-        <h2>Q.{{num}}</h2>
+    <section class="form-wrapper" v-if="signOut">
+        <h1>Sign In</h1>
+        <div class="form-item">
+            <label for="email"></label>
+            <input type="text" name="email" required="required" placeholder="e-mail" id="email" v-model="user">
+            <span>@mediba.jp</span>
+        </div>
+        <div class="button-panel">
+            <button class="button" v-on="click: signInAct();">Sign In</button>
+        </div>
+        <div class="form-footer"></div>
     </section>
 
-    <section>
-        <nav>
-            <ul class="answer__btn-group">
-                <li v-repeat="exA"><input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value}}"><label for="answer__btn-{{$value + 1}}" v-on="click: btnAct({{$value + 1}})">{{$value}}</label></li>
-                <!-- <li><a href="#" class="answer__btn-{{$value + 1}}" v-on="click: btnAct({{$value + 1}})">{{$value + 1}}</a></li> -->
-            </ul>
-        </nav>
+    <section class="answer__wappper" v-if="signIn">
+        <p class="answer__name">{{user}}</p>
+        <h2>Q.{{num}}</h2>
+        <ul class="answer__btn-group">
+            <li v-repeat="exA">
+                <input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value + 1}}" v-on="click: selectBtn($value + 1);">
+                <label for="answer__btn-{{$value + 1}}">{{$value + 1}}</label>
+            </li>
+        </ul>
+        <button class="quiz__btn__final btn btn-success" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
     </section>
 </main>
 
@@ -59,11 +64,18 @@
 <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.10.5/vue.min.js"></script>
-<script src='https://cdn.mlkcca.com/v2.0.0/milkcocoa.js'></script>
-<script src="src/js/app.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/vue/0.12.9/vue.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
+<script src="https://cdn.mlkcca.com/v2.0.0/milkcocoa.js"></script>
+<script src="src/js/common.js"></script>
 
 <script>
+// --------------------------------------------------------
+// Setting
+// --------------------------------------------------------
+var startMo, endMo, time;
+
+
 // --------------------------------------------------------
 // View
 // --------------------------------------------------------
@@ -71,7 +83,12 @@ var vue = new Vue({
     el: 'main',
     data: {
         num: '',
-        exA: []
+        actNum: '',
+        exA: [],
+        disabled: 'disabled',
+        user: '',
+        signOut: true,
+        signIn: false
     },
 
     methods:{
@@ -84,10 +101,29 @@ var vue = new Vue({
             });
         },
 
+        // サインイン処理
+        signInAct: function(){
+            var u = this.$get('user');
+
+            if(u){
+                localStorage.setItem('user', u);
+                vue.quizIn();
+            } else {
+                alert('アカウント名を入力してください');
+            }
+        },
+
+        quizIn: function(u){
+            this.$set('user', u);
+            this.$set('signOut', false);
+            this.$set('signIn', true);
+        },
+
+        // アクティブなクイズを取得
         getActQuiz: function(qaJson){
             var _this = this;
 
-            DS.get(msgID, function(err, data){
+            DS_quiz.get(msgID, function(err, data){
                 _this.$set('num', data.value.DSactNum);
                 _this.$set('exA', _.range(getObjLength(qaJson.q1.answer)));
             });
@@ -99,7 +135,37 @@ var vue = new Vue({
             this.$set('exA', _.range(max));
         },
 
-        btnAct: function(){
+        // 問題選択
+        selectBtn: function(val){
+            this.$set('actNum', val);
+        },
+
+        // ファイナルアンサー
+        finalBtn: function(val){
+            if(this.$get('actNum') == ''){
+                alert('選択してください');
+            } else {
+                endMo = moment();
+                time = endMo.diff(startMo, 'milliseconds') / 1000;
+
+                DS_anser.push({
+                    user : this.$get('user'), // ユーザー名
+                    qNum : this.$get('num'), // 現在の問題数
+                    aNum : this.$get('actNum'), // 回答ナンバー
+                    time : time // 回答時間
+                });
+                this.$set('disabled', 'disabled');
+            }
+        },
+
+        // ボタンアクティブ
+        finalBtnAct: function(){
+            this.$set('disabled', '');
+        },
+
+        // ボタン非アクティブ
+        finalBtnDis: function(){
+            this.$set('disabled', 'disabled');
         }
     }
 });
@@ -108,17 +174,24 @@ var vue = new Vue({
 // --------------------------------------------------------
 // イベント通知
 // --------------------------------------------------------
-DS.on('send', function(data){
-    vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
+DS_quiz.on('send', function(data){
+    var type = data.value.type;
+
+    switch(type){
+        case 'act':
+            vue.changeQ(data.value.DSactNum, data.value.DSmaxNum);
+            break;
+
+        case 'start':
+            vue.finalBtnAct();
+            startMo = moment();
+            break;
+
+        case 'disabled':
+            vue.finalBtnDis();
+            break;
+    }
 });
-
-
-// --------------------------------------------------------
-// ユーザーアクション
-// --------------------------------------------------------
-// $('.answer__btn-group').on('click', '.answer__btn', function() {
-//     alert(1);
-// });
 
 
 // --------------------------------------------------------
@@ -126,6 +199,12 @@ DS.on('send', function(data){
 // --------------------------------------------------------
 // 初回描画
 vue.getJson();
+
+// ログイン後は問題画面に切り替わる
+if(localStorage.getItem('user')){
+    vue.quizIn(localStorage.getItem('user'));
+}
+
 
 </script>
 
