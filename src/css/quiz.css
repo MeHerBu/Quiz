@@ -78,7 +78,7 @@ form { padding: 0 1.5em; }
 
 .quize__box .quize__btn--sq { width: 400px; height: 200px; }
 .quize__box .btn { margin: 20px; }
-.quize__box img { max-width: 100%; max-height: 196px; }
+.quize__box img { width: 100%; height: 100%; }
 .quize__box .quize__select-num { position: absolute; padding: 10px; margin: 0; font-size: 20px; font-weight: bold; width: 48px; background: #2e6da4; color: #fff; height: 48px; -webkit-border-radius: 0 0 2px 0; border-radius: 0 0 2px 0; }
 .quize__box .quize__text { text-align: left; padding: 58px 10px 10px 10px; font-size: 20px; width: 100%; }
 
@@ -93,4 +93,14 @@ form { padding: 0 1.5em; }
 
 .ranking__title { font-size: 30px; padding: 0 0 0 20px; }
 
-/* -- */
+.mt30 { margin-top: 30px; }
+
+.btn.quize__btn--sq.btn-blue.failure { opacity: 0.2; }
+.btn.quize__btn--sq.btn-blue.success { animation: blink 500ms infinite alternate; border: 4px solid; }
+.btn.quize__btn--sq.btn-blue.success .quize__select-num { animation: blink2 500ms infinite alternate; background: #ff000a; }
+
+@keyframes blink { from { border-color: #ff000a; }
+  to { border-color: #FFCFCF; } }
+
+@keyframes blink2 { from { background: #ff000a; }
+  to { bbackground: #fff; } }
