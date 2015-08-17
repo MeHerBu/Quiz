@@ -4,21 +4,21 @@
         "question" : "HTMLの最新バージョンは？",
         "correct" : "a3",
         "answer" : {
-            "a1" : "http://internet.watch.impress.co.jp/img/iw/docs/421/219/html01_s.jpg",
-            "a2" : "http://www.doya-doya.com/wp-content/uploads/2011/02/img21.jpg",
-            "a3" : "http://image.itmedia.co.jp/news/articles/0609/05/yuo_Firefox.jpg",
-            "a4" : "http://i.gzn.jp/img/2013/12/03/ie-mascot-collateral-damage-studios/top.png"
+            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=HTML3",
+            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=HTML4",
+            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=HTML5",
+            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=HTML6"
         }
     },
     "q2": {
-        "type" : "image",
-        "question" : "HTMLの最新バージョンは？",
-        "correct" : "a3",
+        "type" : "text",
+        "question" : "CSSの最新バージョンは？",
+        "correct" : "a2",
         "answer" : {
-            "a1" : "http://internet.watch.impress.co.jp/img/iw/docs/421/219/html01_s.jpg",
-            "a2" : "http://www.doya-doya.com/wp-content/uploads/2011/02/img21.jpg",
-            "a3" : "http://image.itmedia.co.jp/news/articles/0609/05/yuo_Firefox.jpg",
-            "a4" : "http://i.gzn.jp/img/2013/12/03/ie-mascot-collateral-damage-studios/top.png"
+            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=CSS2",
+            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=CSS3",
+            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=CSS4",
+            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=CSS5"
         }
     }
 }

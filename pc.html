@@ -14,10 +14,9 @@ meter {
     width: 960px; height: 20px;
     box-shadow: 0px 0px 10px rgba(0,0,0,.1);
 }
-
 section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 .quiz__answer { font-size: 30px; line-height: 2em; }
-.quiz__answer img { animation: blur 5s ease; }
+.image img { animation: blur 5s ease; }
 @keyframes blur {
   0% {
     -webkit-filter: blur(100px)
@@ -92,7 +91,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
     <section class="quiz" v-if="scrn.s3">
         <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
         <p class="quiz__title">{{quiz}}</p>
-        <ol class="quiz__answer">
+        <ol class="quiz__answer" v-class="type">
            <li v-repeat="ex"><img src="{{$value}}"></li>
         </ol>
         <div class="quiz__time">
@@ -145,7 +144,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000;
-var countTime = 10;
+var countTime = 5;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
@@ -171,6 +170,7 @@ var vue = new Vue({
         nowTime: sec,
         changeBtn: true,
         totalRankingBtn: false,
+        type: '',
         rankData: '',
         rankTotal: '',
         scrn : {
@@ -208,11 +208,13 @@ var vue = new Vue({
 
         // 問題スタート
         startQ: function(){
+            var _this = this;
+            var n = _this.$get('num');
+            _this.$set('type', qaJson['q' + n].type);
+
             vue.sendDS('start');
             vue.countStart();
             vue.toScrn('s3');
-
-            console.log(vue);
         },
 
         // ランキング画面へ
@@ -296,7 +298,9 @@ var vue = new Vue({
                 }
 
                 var totalRanking = _.sortBy(totalAry, 'time'); // 回答時間が早い順にソート
-                var rankingGroup = _.groupBy(totalRanking, function(obj){ return obj.user; }); // 重複ユーザーをグルーピング
+                var rankingGroup = _.groupBy(totalAry, function(obj){ return obj.user; }); // 重複ユーザーをグルーピング
+                console.log(rankingGroup);
+                // var rankingGroup = _.sortBy(rankingGroup, 'time'); // 重複ユーザーをグルーピング
 
                 // グルーピングしたデータ処理
                 $.each(rankingGroup, function(key, val) {
