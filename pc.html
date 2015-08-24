@@ -6,61 +6,6 @@
 <title>問題画面 - Quiz</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link href="src/css/quiz.css" rel="stylesheet">
-<style>
-[v-cloak] { display:none }
-meter {
-    box-sizing: border-box;
-    border: 1px solid #ccc;
-    width: 960px; height: 20px;
-    box-shadow: 0px 0px 10px rgba(0,0,0,.1);
-}
-section { box-sizing: border-box; width: 960px; margin: 0 auto; }
-.quiz__answer { font-size: 30px; line-height: 2em; }
-.image img { animation: blur 5s ease; }
-@keyframes blur {
-  0% {
-    -webkit-filter: blur(100px)
-  }
-  100% {
-    -webkit-filter: blur(0)
-  }
-}
-/*.quiz__answer img { -webkit-filter: blur(30px); }*/
-.quiz__ranking { font-size: 18px; padding: 0; margin-bottom: 0; list-style: none; counter-reset: rank; }
-.quiz__ranking li { background: #fff; border: 1px solid #eee; padding: 20px; display: -webkit-flexbox; display:flex; }
-.quiz__ranking li:before {counter-increment: rank; content: counter(rank); color: #aaa; font-size: 42px; margin-right: 1em; }
-.quiz__ranking li span,
-.quiz__ranking li time { display: block; line-height: 32px; }
-.quiz__ranking .quiz__user{ color: #4f9fcf; flex-basis: 200px; }
-.quiz__ranking .quiz__user:first-letter{ font-size: 32px;  border-radius: 50%; }
-.quiz__ranking .quiz__point{ background: #d44950; width: 40px; height: 40px; line-height: 40px; border-radius: 50%; color: #fff; text-align: center; }
-.quiz__ranking .quiz__time { margin-left: 2em; color: #999; flex-basis: 200px;  text-align: right; font-size: 22px; }
-.quiz__ranking .quiz__time:after { content: '秒'; font-size: 12px; margin-left: 0.2em; }
-.quiz__nav { text-align: center; margin: 40px 0; }
-.quiz__time { position: relative; height: 40px; }
-.quiz__time time { display: inline-block; width: 40px; height: 40px; background: #333; color: #fff; position: absolute; top: -10px ; left: 470px; font-size: 10px; border-radius: 50%; text-align: center; line-height: 40px; font-weight: normal; }
-.quiz__time time:first-letter { font-size: 18px; }
-.footer {margin: 40px 0; }
-
-.anime-enter {
-  animation: bounce-in 1s ease-in;
-}
-.anime-leave {
-  animation: bounce-out 1s ease-out;
-}
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-</style>
 </head>
 <body>
 
@@ -80,7 +25,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
         </div>
     </section>
 
-    <section class="quiz" v-if="scrn.s2">
+    <section class="contents-body quiz" v-if="scrn.s2">
         <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
         <p class="quiz__title">{{quiz}}</p>
         <div class="quiz__nav">
@@ -88,19 +33,22 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
         </div>
     </section>
 
-    <section class="quiz" v-if="scrn.s3">
+    <section class="contents-body quiz" v-if="scrn.s3">
         <h2 v-show="num" class="quiz__num">Q.{{num}}</h2>
         <p class="quiz__title">{{quiz}}</p>
         <ol class="quiz__answer" v-class="type">
-           <li v-repeat="ex"><img src="{{$value}}"></li>
+           <li v-repeat="ex" v-class="correct"><img src="{{$value}}"></li>
         </ol>
-        <div class="quiz__time">
+        <div class="quiz__time" v-if="timeArea">
             <meter value="{{nowTime * (100 / setTime)}}" low="30" high="60" optimum="100" max="100"></meter>
-            <time>{{nowTime}}秒</time>
+            <time>{{nowTime}}<span>秒</span></time>
+        </div>
+        <div class="quiz__nav">
+            <button class="quiz__btn btn btn-success" v-on="click: rankingQ()" v-if="rankingBtn">ランキングへ</button>
         </div>
     </section>
 
-    <section class="quiz" v-if="scrn.s4">
+    <section class="contents-body quiz" v-if="scrn.s4">
         <h2 class="quiz__title">ランキング</h2>
         <ol class="quiz__ranking">
             <li class="anime" v-repeat="rankData" v-transition="anime" stagger="500">
@@ -114,7 +62,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
         </div>
     </section>
 
-    <section class="quiz" v-if="scrn.s5">
+    <section class="contents-body quiz" v-if="scrn.s5">
         <h2 class="quiz__title">総合ランキング</h2>
         <ol class="quiz__ranking">
             <li v-repeat="rankTotal" v-transition="anime" stagger="1000">
@@ -144,7 +92,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000;
-var countTime = 5;
+var countTime = 1;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
@@ -168,9 +116,12 @@ var vue = new Vue({
         ex: '',
         setTime: countTime,
         nowTime: sec,
+        timeArea: true,
         changeBtn: true,
+        rankingBtn: false,
         totalRankingBtn: false,
         type: '',
+        correct: '',
         rankData: '',
         rankTotal: '',
         scrn : {
@@ -215,6 +166,25 @@ var vue = new Vue({
             vue.sendDS('start');
             vue.countStart();
             vue.toScrn('s3');
+        },
+
+        testQ: function(num){
+
+        },
+
+        // 正解画面
+        correctQ: function(){
+            var n = this.$get('num');
+            var nC = qaJson['q' + n].correct.charAt(1); //正解No
+
+            this.$set('rankingBtn', true);
+            this.$set('timeArea', false);
+
+            for(var i=1; i<=4; i++){
+                if(i == nC) {
+                    this.$set('correct', 'anime-correct' + i);
+                }
+            }
         },
 
         // ランキング画面へ
@@ -266,6 +236,7 @@ var vue = new Vue({
                 this.$set('totalRankingBtn', true);
             }
 
+            this.$set('correct', '');
             this.$set('rankData', '');
             // 回答画面にデータを送信
             vue.sendDS('act', actNum, this.$get('ex'));
@@ -358,9 +329,10 @@ var vue = new Vue({
             // 0秒になったらランキング画面に切り替え
             if(sec == 0) {
                 clearInterval(timer);
-                vue.rankingQ();
                 sec = countTime;
                 vue.$set('nowTime', sec);
+                // vue.rankingQ();
+                vue.correctQ();
             }
         }
     }
