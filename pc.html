@@ -8,7 +8,7 @@
 <link href="src/css/quiz.css" rel="stylesheet">
 <style>
 [v-cloak] { display:none }
-.contents-body {padding-bottom: 40px;}
+.contents-body {padding-bottom: 40px; position: relative;}
 section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 .quiz__answer { font-size: 30px; line-height: 2em; }
 .image img { animation: blur 5s ease; }
@@ -44,10 +44,17 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 .quiz__answer { list-style: none; counter-reset: rank; margin: 0 auto; padding: 0; width: 840px; display:flex; flex-wrap: wrap; }
 .quiz__answer li { width: 400px; margin: 10px 10px 0 0; padding: 0; border: 4px solid #000; box-sizing: content-box; position: relative;}
 .quiz__answer li:after {counter-increment: rank; content: counter(rank); color: #fff; font-size: 36px; margin-right: 1em; position: absolute; top:0; left: 0; background: #000; width: 40px; height: 40px; line-height: 40px; text-align: center; }
+.correctNum-1, .correctNum-2, .correctNum-3, .correctNum-4 {
+    display: inline-block; font-size: 24px; background: #d44950; width: 40px; height: 40px; line-height: 40px; border-radius: 50%; color: #fff; text-align: center; position: absolute;
+}
+.correctNum-1 { top: 286px; left: 429px;}
+.correctNum-2 { top: 286px; left: 847px;}
+.correctNum-3 { top: 504px; left: 429px;}
+.correctNum-4 { top: 504px; left: 847px;}
 .anime-correct1:nth-child(1),
 .anime-correct2:nth-child(2),
 .anime-correct3:nth-child(3),
-.anime-correct4:nth-child(4) { animation: blink 300ms 1s infinite alternate; }
+.anime-correct4:nth-child(4) { animation: blink 300ms infinite alternate; }
 @keyframes blink {
    0%  { border-color: rgba(212, 73, 80, .2); }
    100% { border-color: rgba(212, 73, 80, 1); }
@@ -104,11 +111,14 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
         <ol class="quiz__answer" v-class="type">
            <li v-repeat="ex" v-class="correct"><img src="{{$value}}"></li>
         </ol>
+        <span class="correctNum-{{$index + 1}}" v-repeat="correctNum" v-show="correctAgg">{{$value}}</span>
         <div class="quiz__time" v-if="timeArea">
             <meter value="{{nowTime * (100 / setTime)}}" low="30" high="60" optimum="100" max="100"></meter>
             <time>{{nowTime}}<span>秒</span></time>
         </div>
         <div class="quiz__nav">
+            <button class="quiz__btn btn btn-success" v-on="click: aggregateQ()" v-if="aggregateBtn">解答数集計</button>
+            <button class="quiz__btn btn btn-success" v-on="click: answerQ()" v-if="answerBtn">正解表示</button>
             <button class="quiz__btn btn btn-success" v-on="click: rankingQ()" v-if="rankingBtn">ランキングへ</button>
         </div>
     </section>
@@ -183,10 +193,19 @@ var vue = new Vue({
         nowTime: sec,
         timeArea: true,
         changeBtn: true,
+        aggregateBtn: false,
+        answerBtn: false,
         rankingBtn: false,
+        correctAgg: false,
         totalRankingBtn: false,
         type: '',
         correct: '',
+        correctNum: {
+            c1 : 0,
+            c2 : 0,
+            c3 : 0,
+            c4 : 0
+        },
         rankData: '',
         rankTotal: '',
         scrn : {
@@ -233,23 +252,57 @@ var vue = new Vue({
             vue.toScrn('s3');
         },
 
-        testQ: function(num){
-
+        endQ: function(){
+            this.$set('aggregateBtn', true);
+            this.$set('timeArea', false);
+            vue.sendDS('disabled');
         },
 
-        // 正解画面
-        correctQ: function(){
+        // 解答集計
+        aggregateQ: function(){
+            var n = this.$get('num');
+            var correctArray = [];
+            var correctObj = {};
+
+            // 回答数を集計
+            DS_anser.stream().next(function(err, data) {
+                for(var i = 0; i < data.length; i++){
+                    if(n == data[i].value.qNum) {
+                        correctArray.push(data[i].value.aNum);
+                    }
+                }
+
+                // 超複数をカウント
+                correctObj = correctArray.reduce(function(a, b) {
+                    a[b] = a[b] ? a[b] + 1 : 1;
+                    return a;
+                }, {});
+
+                for(var i = 1; i <= _.size(correctObj); i++){
+                    vue.correctNum['c' + i] = correctObj[i];
+                    console.log(vue.correctNum['c' + i]);
+                }
+             });
+
+            this.$set('correctAgg', true);
+            this.$set('aggregateBtn', false);
+            this.$set('answerBtn', true);
+        },
+
+        // 正解表示
+        answerQ: function(){
             var n = this.$get('num');
             var nC = qaJson['q' + n].correct.charAt(1); //正解No
 
-            this.$set('rankingBtn', true);
-            this.$set('timeArea', false);
-
-            for(var i=1; i<=4; i++){
+            // 正解Noのクラスを付与
+            for(var i = 1; i <= 4; i++){
                 if(i == nC) {
                     this.$set('correct', 'anime-correct' + i);
                 }
             }
+
+            this.$set('answerBtn', false);
+            this.$set('rankingBtn', true);
         },
 
         // ランキング画面へ
@@ -259,7 +312,6 @@ var vue = new Vue({
             var rankArray = [];
 
             vue.toScrn('s4');
-            vue.sendDS('disabled');
 
             // 回答データを取得
             DS_anser.stream().next(function(err, data) {
@@ -275,6 +327,14 @@ var vue = new Vue({
                 var ranking = _.sortBy(rankArray, 'time'); // 回答時間が早い順にソート
                 _this.$set('rankData', ranking); // バインディング
             });
+
+            for(var i = 1; i <= 4; i++){
+                vue.correctNum['c' + i] = 0;
+            }
+
+            this.$set('correctAgg', false);
+            this.$set('correct', '');
+            this.$set('rankingBtn', false);
 
             // BGM再スタート
             El_audioBgm.play();
@@ -301,7 +361,7 @@ var vue = new Vue({
                 this.$set('totalRankingBtn', true);
             }
 
-            this.$set('correct', '');
+            this.$set('timeArea', true);
             this.$set('rankData', '');
             // 回答画面にデータを送信
             vue.sendDS('act', actNum, this.$get('ex'));
@@ -330,13 +390,10 @@ var vue = new Vue({
                             totalAry.push(rankObj)
                         }
                     }
-
                 }
 
                 var totalRanking = _.sortBy(totalAry, 'time'); // 回答時間が早い順にソート
                 var rankingGroup = _.groupBy(totalAry, function(obj){ return obj.user; }); // 重複ユーザーをグルーピング
-                console.log(rankingGroup);
-                // var rankingGroup = _.sortBy(rankingGroup, 'time'); // 重複ユーザーをグルーピング
 
                 // グルーピングしたデータ処理
                 $.each(rankingGroup, function(key, val) {
@@ -396,8 +453,7 @@ var vue = new Vue({
                 clearInterval(timer);
                 sec = countTime;
                 vue.$set('nowTime', sec);
-                // vue.rankingQ();
-                vue.correctQ();
+                vue.endQ();
             }
         }
     }
