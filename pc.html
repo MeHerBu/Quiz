@@ -11,7 +11,7 @@
 .contents-body {padding-bottom: 40px;}
 section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 .quiz__answer { font-size: 30px; line-height: 2em; }
-.image img { animation: blur 5s ease; }
+.image img { animation: blur 5s ease-out; }
 @keyframes blur {
   0% {
     -webkit-filter: blur(100px)
@@ -21,7 +21,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
   }
 }
 .quiz__ranking { font-size: 18px; padding: 0; margin-bottom: 0; list-style: none; counter-reset: rank; }
-.quiz__ranking li { background: #fff; border: 1px solid #eee; padding: 20px; display:flex; }
+.quiz__ranking li { background: #fff; border: 1px solid #eee; padding: 20px; display:flex;}
 .quiz__ranking li:before {counter-increment: rank; content: counter(rank); color: #aaa; font-size: 42px; margin-right: 1em; }
 .quiz__ranking li span,
 .quiz__ranking li time { display: block; line-height: 32px; }
@@ -43,7 +43,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 .quiz__time time span { font-size: 10px;}
 .quiz__answer__wrap { position: relative;}
 .quiz__answer { list-style: none; counter-reset: rank; margin: 0 auto; padding: 0; width: 840px; display:flex; flex-wrap: wrap; }
-.quiz__answer li { width: 400px; margin: 10px 10px 0 0; padding: 0; border: 4px solid #000; box-sizing: content-box; position: relative;}
+.quiz__answer li { width: 400px; margin: 10px 10px 0 0; padding: 0; border: 4px solid #000; box-sizing: content-box; position: relative; overflow: hidden; }
 .quiz__answer li:after {counter-increment: rank; content: counter(rank); color: #fff; font-size: 36px; margin-right: 1em; position: absolute; top:0; left: 0; background: #000; width: 40px; height: 40px; line-height: 40px; text-align: center; }
 .correctNum-1, .correctNum-2, .correctNum-3, .correctNum-4 {
     display: inline-block; font-size: 24px; background: #d44950; width: 40px; height: 40px; line-height: 40px; border-radius: 50%; color: #fff; text-align: center; position: absolute;
@@ -170,7 +170,7 @@ section { box-sizing: border-box; width: 960px; margin: 0 auto; }
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000;
-var countTime = 10;
+var countTime = 1;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
@@ -277,13 +277,17 @@ var vue = new Vue({
 
                 // 超複数をカウント
                 correctObj = correctArray.reduce(function(a, b) {
-                    a[b] = a[b] ? a[b] + 1 : 1;
+                    a['c' + b] = a['c' + b] ? a['c' + b] + 1 : 1;
                     return a;
                 }, {});
 
-                for(var i = 1; i <= _.size(correctObj); i++){
-                    vue.correctNum['c' + i] = correctObj[i];
-                    console.log(vue.correctNum['c' + i]);
+                for(var i = 1; i <= 4; i++){
+                    var c = correctObj['c' + i];
+                    if(c) {
+                        vue.correctNum['c' + i] = c;
+                    } else {
+                        vue.correctNum['c' + i] = 0;
+                    }
                 }
              });
 
@@ -395,7 +399,6 @@ var vue = new Vue({
                     }
                 }
 
-                var totalRanking = _.sortBy(totalAry, 'time'); // 回答時間が早い順にソート
                 var rankingGroup = _.groupBy(totalAry, function(obj){ return obj.user; }); // 重複ユーザーをグルーピング
 
                 // グルーピングしたデータ処理
@@ -413,7 +416,8 @@ var vue = new Vue({
                     totalGroupAry.push(rankObjGrp);
                 });
 
-                var rankingFix = _.sortBy(totalGroupAry, function(obj){ return -obj.point; }); // 正解数が多い順にソート
+                var timeSort = _.sortBy(totalGroupAry, function(itme){ return itme.time; }); // 回答時間が早い順にソート
+                var rankingFix = _.sortBy(timeSort, function(obj){ return -obj.point; }); // 正解数が多い順にソート
 
                 _this.$set('rankTotal', rankingFix);
             });

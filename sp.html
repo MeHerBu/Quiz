@@ -106,7 +106,7 @@ var vue = new Vue({
 
             if(u){
                 localStorage.setItem('user', u);
-                vue.quizIn();
+                vue.quizIn(u);
             } else {
                 alert('アカウント名を入力してください');
             }

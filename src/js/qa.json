@@ -100,13 +100,13 @@
     },
     "q10": {
         "type" : "text",
-        "question" : "数年前に一部で話題になった「すべてのHTMLコーダーに捧ぐ」とリリースされた曲のタイトルは？",
+        "question" : "数年前に話題になった「●●●で歌わせて 〜すべてのHTMLコーダーに捧ぐ〜」という曲のタイトルのうち、●●●に該当するものは？",
         "correct" : "a2",
         "answer" : {
-            "a1" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=パディング トップで歌わせて",
-            "a2" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=マージン トップで歌わせて",
-            "a3" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ディスプレイ ノーンで歌わせて",
-            "a4" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ポジション アブソリュートで歌わせて"
+            "a1" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=パディング トップ",
+            "a2" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=マージン トップ",
+            "a3" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ディスプレイ ノーン",
+            "a4" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ポジション アブソリュート"
         }
     }
 }
