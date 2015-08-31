@@ -15,10 +15,10 @@
         "question" : "次のうち、Photoshop 7.0のスプラッシュ画面はどれ？",
         "correct" : "a1",
         "answer" : {
-            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=1",
-            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=2",
-            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=3",
-            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=4"
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/photoshop7.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/photoshop5.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/photoshopCS2.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/photoshop2.png"
         }
     },
     "q3": {
@@ -37,10 +37,10 @@
         "question" : "先日ミーハー部が発表したmBaasのサービス名は何？",
         "correct" : "a2",
         "answer" : {
-            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=1",
-            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=2",
-            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=3",
-            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=4"
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/beer.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/milkcocoa.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/milk.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/awamori.png"
         }
     },
     "q5": {
@@ -68,12 +68,12 @@
     "q7": {
         "type" : "image",
         "question" : "次のうち、みんなに愛されていたIE6のキャプチャーはどれ？",
-        "correct" : "a2",
+        "correct" : "a1",
         "answer" : {
-            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=1",
-            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=2",
-            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=3",
-            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=4"
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/ie6.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/ie1.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/ie4.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/ie9.png"
         }
     },
     "q8": {
@@ -92,10 +92,10 @@
         "question" : "ソフトバンクが開発したロボットは次のうちどれ？",
         "correct" : "a2",
         "answer" : {
-            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=エヴァンゲリオン",
-            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=ガンダム",
-            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=Pepper",
-            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=ドラえもん"
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/eva.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/peper.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/gundam.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/doraemon.png"
         }
     },
     "q10": {
