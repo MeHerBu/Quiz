@@ -132,6 +132,7 @@ var vue = new Vue({
         changeQ: function(n, max){
             this.$set('num', n);
             this.$set('exA', _.range(max));
+            $('input[name=exA]').attr('checked',false);
         },
 
         // 問題選択
