@@ -108,5 +108,27 @@
             "a3" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ディスプレイ ノーン",
             "a4" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ポジション アブソリュート"
         }
+    },
+    "q11": {
+        "type" : "image",
+        "question" : "数年前に話題になった擬人化CSSキャラクターのうち、人気ランキング上位1位は誰？",
+        "correct" : "a4",
+        "answer" : {
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/float.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/overflow.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/position.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/display.png"
+        }
+    },
+    "q12": {
+        "type" : "image",
+        "question" : "Androidのコードネームは、お菓子名で統一していることで有名ですが、Ver 6.0のコードネームは何？",
+        "correct" : "a1",
+        "answer" : {
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/marshmallow.jpg",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/dorayaki.jpg",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/applepie.jpg",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/macaron.jpg"
+        }
     }
 }
