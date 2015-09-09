@@ -1,24 +1,112 @@
 {
     "q1": {
-        "type" : "image",
-        "question" : "HTMLの最新バージョンは？",
+        "type" : "text",
+        "question" : "HTMLは何の略？",
         "correct" : "a3",
         "answer" : {
-            "a1" : "http://internet.watch.impress.co.jp/img/iw/docs/421/219/html01_s.jpg",
-            "a2" : "http://www.doya-doya.com/wp-content/uploads/2011/02/img21.jpg",
-            "a3" : "http://image.itmedia.co.jp/news/articles/0609/05/yuo_Firefox.jpg",
-            "a4" : "http://i.gzn.jp/img/2013/12/03/ie-mascot-collateral-damage-studios/top.png"
+            "a1" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=はやくつよくまもるらくちん",
+            "a2" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ハイパーテキストマックラップランゲージ",
+            "a3" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ハイパーテキストマークアップランゲージ",
+            "a4" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ハイパータイガーマイクゴシップランガー"
         }
     },
     "q2": {
         "type" : "image",
-        "question" : "HTMLの最新バージョンは？",
+        "question" : "次のうち、Photoshop 7.0のスプラッシュ画面はどれ？",
+        "correct" : "a1",
+        "answer" : {
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/photoshop7.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/photoshop5.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/photoshopCS2.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/photoshop2.png"
+        }
+    },
+    "q3": {
+        "type" : "text",
+        "question" : "黄金比と白銀比のうち正しい組み合わせは正しいのはどれ？",
+        "correct" : "a4",
+        "answer" : {
+            "a1" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=1:1.732 / 1:√3",
+            "a2" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=1:1.618 / 1:√3",
+            "a3" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=1:1.732 / 1:√2",
+            "a4" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=1:1.618 / 1:√2"
+        }
+    },
+    "q4": {
+        "type" : "image",
+        "question" : "先日ミーハー部が発表したmBaasのサービス名は何？",
+        "correct" : "a2",
+        "answer" : {
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/beer.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/milkcocoa.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/milk.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/awamori.png"
+        }
+    },
+    "q5": {
+        "type" : "text",
+        "question" : "HTML5で廃止されたタグは次のうちどれ？",
         "correct" : "a3",
         "answer" : {
-            "a1" : "http://internet.watch.impress.co.jp/img/iw/docs/421/219/html01_s.jpg",
-            "a2" : "http://www.doya-doya.com/wp-content/uploads/2011/02/img21.jpg",
-            "a3" : "http://image.itmedia.co.jp/news/articles/0609/05/yuo_Firefox.jpg",
-            "a4" : "http://i.gzn.jp/img/2013/12/03/ie-mascot-collateral-damage-studios/top.png"
+            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=output",
+            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=mark",
+            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=font",
+            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=b"
+        }
+    },
+    "q6": {
+        "type" : "text",
+        "question" : "Mac OS Xのテキスト読み上げシステムの日本語音声には名前がついています。その名前は？",
+        "correct" : "a2",
+        "answer" : {
+            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=Hanako",
+            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=Kyoko",
+            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=Rinko",
+            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=Yuko"
+        }
+    },
+    "q7": {
+        "type" : "image",
+        "question" : "次のうち、みんなに愛されていたIE6のキャプチャーはどれ？",
+        "correct" : "a1",
+        "answer" : {
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/ie6.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/ie1.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/ie4.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/ie9.png"
+        }
+    },
+    "q8": {
+        "type" : "text",
+        "question" : "いろんな遊びゴコロ隠しているgoogleですが以下のうち隠しコマンドでは無いのはどれ？",
+        "correct" : "a4",
+        "answer" : {
+            "a1" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=Gravity",
+            "a2" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=一回転",
+            "a3" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=blink html",
+            "a4" : "http://placehold.jp/3d4070/ffffff/400x200.png?text=Bigbang"
+        }
+    },
+    "q9": {
+        "type" : "image",
+        "question" : "ソフトバンクが開発したロボットは次のうちどれ？",
+        "correct" : "a2",
+        "answer" : {
+            "a1" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/eva.png",
+            "a2" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/peper.png",
+            "a3" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/gundam.png",
+            "a4" : "http://mediba.jpn.org/bukatsu/meherbu/quiz/src/img/quiz_img/doraemon.png"
+        }
+    },
+    "q10": {
+        "type" : "text",
+        "question" : "数年前に話題になった「●●●で歌わせて 〜すべてのHTMLコーダーに捧ぐ〜」という曲のタイトルのうち、●●●に該当するものは？",
+        "correct" : "a2",
+        "answer" : {
+            "a1" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=パディング トップ",
+            "a2" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=マージン トップ",
+            "a3" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ディスプレイ ノーン",
+            "a4" : "http://placehold.jp/40/3d4070/ffffff/400x200.png?text=ポジション アブソリュート"
         }
     }
 }
