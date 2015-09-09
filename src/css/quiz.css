@@ -19,7 +19,7 @@ form { padding: 0 1.5em; }
 .form-item input { background: #fafafa; border: none; border-bottom: 2px solid #e9e9e9; color: #666; font-family: 'Open Sans', sans-serif; height: 50px; transition: border-color 0.3s; width: 70%; padding: 5px; }
 .form-item input:focus { border-bottom: 2px solid #c0c0c0; outline: none; }
 
-.button-panel { margin: 2em 0 0; width: 100%; }
+.button-panel { margin: 2em 0 0; width: 100%; text-align: center; }
 
 .button { background-color: #337ab7; border-color: #2e6da4; border: none; color: #fff; cursor: pointer; height: 50px; font-family: 'Open Sans', sans-serif; font-size: 16px; letter-spacing: 0.05em; text-align: center; text-transform: uppercase; transition: background 0.3s ease-in-out; width: 100%; border-radius: 6px; width: 300px; display: block; margin: 0 auto; }
 
@@ -36,7 +36,7 @@ form { padding: 0 1.5em; }
 
 .footer { width: 100%; text-align: center; position: relative; bottom: 0px; display: block; }
 
-.contents-body { width: 980px; margin: 20px auto 30px auto; display: block; background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16); border-radius: 5px; padding: 20px; }
+.contents-body { width: 980px; margin: 20px auto 30px auto; display: block; background-color: #fff; box-shadow: 0 3px 10px rgba(0, 0, 0, 0.23), 0 3px 10px rgba(0, 0, 0, 0.16); border-radius: 5px; padding: 20px 20px 40px 20px; }
 
 .quiz-title, .quiz__title { font-size: 24px; line-height: 1; margin: 0 0 10px 0; }
 
@@ -85,15 +85,3 @@ form { padding: 0 1.5em; }
 .ranking--list .raning_answer { display: table-cell; width: 10%; vertical-align: middle; }
 
 .ranking__title { font-size: 30px; padding: 0 0 0 20px; }
-
-.mt30 { margin-top: 30px; }
-
-.btn.quize__btn--sq.btn-blue.failure { opacity: 0.2; }
-.btn.quize__btn--sq.btn-blue.success { animation: blink 500ms infinite alternate; border: 4px solid; }
-.btn.quize__btn--sq.btn-blue.success .quize__select-num { animation: blink2 500ms infinite alternate; background: #ff000a; }
-
-@keyframes blink { from { border-color: #ff000a; }
-  to { border-color: #FFCFCF; } }
-
-@keyframes blink2 { from { background: #ff000a; }
-  to { bbackground: #fff; } }
