@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link href="src/css/quiz.css" rel="stylesheet">
 </head>
-<body>
+<body class="pc">
 
 <header class="header">
     <h1>Quiz</h1>
@@ -17,10 +17,6 @@
     <section class="quiz quiz-top" v-if="scrn.s1">
         <div class="introduction">
             <h2 class="quiz-title">リアルタイム早押しクイズゲーム</h2>
-            <div class="quiz-text">
-                <p>サインインしたら、クイズが始まるまで、しばらくお待ちください。（リロード禁止）</p>
-                <p>クイズが開始されたら、お持ちのスマホ端末から正解だと思うボタンを押し、ファイナルアンサーボタンを押してね。</p>
-            </div>
             <div class="quiz__nav">
                 <button class="quiz__btn btn btn-success" v-on="click: openQ()">始める！</button>
             </div>
@@ -99,7 +95,7 @@
 // Setting
 // --------------------------------------------------------
 var intervalTime = 1000;
-var countTime = 1;
+var countTime = 15;
 var sec = countTime;
 var nowScrn = 's1'; // 初回スクリーン名
 var timer;
@@ -188,6 +184,11 @@ var vue = new Vue({
             this.$set('aggregateBtn', true);
             this.$set('timeArea', false);
             vue.sendDS('disabled');
+
+            // BGM再スタート
+            El_audioBgm.play();
+            El_audioThinking.pause();
+            El_audioThinking.currentTime = 0;
         },
 
         // 解答集計
@@ -271,11 +272,6 @@ var vue = new Vue({
             this.$set('correctAgg', false);
             this.$set('correct', '');
             this.$set('rankingBtn', false);
-
-            // BGM再スタート
-            El_audioBgm.play();
-            El_audioThinking.pause();
-            El_audioThinking.currentTime = 0;
         },
 
         // 次の問題へ
