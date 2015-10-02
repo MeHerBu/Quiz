@@ -31,11 +31,11 @@
         <h2>Q.{{num}}</h2>
         <ul class="answer__btn-group">
             <li v-repeat="exA">
-                <input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value + 1}}" v-on="click: selectBtn($value + 1);">
+                <input type="radio" id="answer__btn-{{$value + 1}}" name="exA" value="{{$value + 1}}" v-on="touchend: selectBtn($value + 1), click: selectBtn($value + 1)">
                 <label for="answer__btn-{{$value + 1}}">{{$value + 1}}</label>
             </li>
         </ul>
-        <button class="quiz__btn__final btn btn-success" v-on="click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
+        <button class="quiz__btn__final btn btn-success" v-on="touchend: finalBtn({{$value + 1}}), click: finalBtn({{$value + 1}})" v-attr="disabled: disabled">Final Answer</button>
     </section>
 </main>
 
@@ -56,6 +56,7 @@
 // Setting
 // --------------------------------------------------------
 var startMo, endMo, time;
+
 
 
 // --------------------------------------------------------
